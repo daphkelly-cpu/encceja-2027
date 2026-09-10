@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado ENEM 2022 - Híbrido com PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+            gap: 0;
+        }
+        
+        .painel-questoes {
+            flex: 0 0 45%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-right: 1px solid #ddd;
+            overflow: hidden;
+        }
+        
+        .painel-pdf {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f9f9f9;
+        }
+        
+        .header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            background: white;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #2563eb;
+            transition: width 0.3s;
+        }
+        
+        .questao-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .conteudo-questoes {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        
+        .questao-box {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .questao-numero {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .questao-numero strong {
+            color: #2563eb;
+        }
+        
+        .enunciado {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        
+        .alternativas {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .alternativa {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .alternativa:hover {
+            background: #f0f0f0;
+            border-color: #2563eb;
+        }
+        
+        .alternativa.selecionada {
+            background: #dbeafe;
+            border-color: #2563eb;
+            font-weight: 500;
+            color: #1e40af;
+        }
+        
+        .alternativa.correta {
+            background: #dcfce7;
+            border-color: #22c55e;
+            color: #166534;
+        }
+        
+        .alternativa.incorreta {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+        
+        .gabarito-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 13px;
+            margin-top: 1rem;
+            color: #0369a1;
+        }
+        
+        .botoes {
+            display: flex;
+            gap: 8px;
+            margin-top: 1.5rem;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover:not(:disabled) {
+            background: #f0f0f0;
+            border-color: #999;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-proximo {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+            flex: 1;
+        }
+        
+        .btn-proximo:hover:not(:disabled) {
+            background: #1d4ed8;
+        }
+        
+        /* PDF Viewer */
+        .pdf-header {
+            padding: 1rem;
+            background: white;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+        
+        .pdf-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .pdf-controls button {
+            padding: 4px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .pdf-viewer {
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e5e5e5;
+        }
+        
+        #pdf-canvas {
+            max-width: 100%;
+            max-height: 100%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .resultado-final {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2563eb;
+            margin: 1rem 0;
+        }
+        
+        .mensagem {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .reiniciar-btn {
+            padding: 10px 24px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            .painel-questoes,
+            .painel-pdf {
+                flex: 1;
+                border: none;
+            }
+            .painel-questoes {
+                border-bottom: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- PAINEL QUESTÕES -->
+        <div class="painel-questoes">
+            <div class="header">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress" style="width: 0%;"></div>
+                </div>
+                <div class="questao-info">
+                    <span>Questão <strong id="questao-numero">1</strong> de <strong>90</strong></span>
+                    <span id="percentual">0%</span>
+                </div>
+            </div>
+            
+            <div class="conteudo-questoes" id="conteudo">
+                <div class="questao-box">
+                    <div class="questao-numero"><strong>ENEM 2022</strong></div>
+                    <div class="enunciado">Carregando questões...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PAINEL PDF -->
+        <div class="painel-pdf">
+            <div class="pdf-header">
+                <div>📄 Referência Visual - PDF Original</div>
+                <div class="pdf-controls">
+                    <button onclick="anteriorPDF()">← Anterior</button>
+                    <span id="pdf-pagina">Página 1</span>
+                    <button onclick="proximaPDF()">Próxima →</button>
+                </div>
+            </div>
+            <div class="pdf-viewer">
+                <canvas id="pdf-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        
+        let questoes = [];
+        let gabarito = {};
+        let questaoAtual = 0;
+        let respostas = {};
+        let totalAcertos = 0;
+        
+        // Dados inline (você pode carregar de um arquivo JSON também)
+        const GABARITO = {"1":"B","2":"D","3":"D","4":"C","5":"E","6":"C","7":"A","8":"C","9":"C","10":"C","11":"A","12":"B","13":"B","14":"E","15":"D","16":"E","17":"B","18":"A","19":"D","20":"D","21":"A","22":"D","23":"B","24":"E","25":"E","26":"E","27":"C","28":"B","29":"B","30":"A","31":"E","32":"C","33":"C","34":"B","35":"B","36":"C","37":"E","38":"E","39":"A","40":"B","41":"E","42":"B","43":"A","44":"A","45":"D","46":"E","47":"C","48":"D","49":"E","50":"A","51":"C","52":"D","53":"C","54":"A","55":"E","56":"D","57":"B","58":"C","59":"E","60":"B","61":"C","62":"B","63":"A","64":"E","65":"A","66":"A","67":"C","68":"B","69":"E","70":"E","71":"C","72":"E","73":"A","74":"C","75":"A","76":"C","77":"A","78":"D","79":"E","80":"E","81":"A","82":"D","83":"E","84":"E","85":"E","86":"C","87":"A","88":"D","89":"E","90":"A"};
+        
+        // Questões exemplo (você pode injetar as 90 questões aqui)
+        const QUESTOES_EXEMPLO = [
+            {numero: 1, enunciado: "Syphilis rates are rising relentlessly in Britain. No one wants syphilis. Its symptoms include ulcers and insanity. The 'French disease' as the English long called it, is an infamously 'othered' illness. As the English used to call it the French disease, the French called it the Neapolitan one. The othering didn't stop there. With base na leitura do texto, o termo 'othering' remete ao(à)", alternativas: {A: "disseminação de uma doença transmissível", B: "crescimento do número de casos de DSTs", C: "origem histórica de uma antiga enfermidade", D: "dificuldade de identificar as origens da sífilis", E: "tendência de culpar os outros por um problema"}},
+            {numero: 2, enunciado: "What is aquamation? The green alternative to cremation. Aquamation is a water-based process whose scientific name is 'alkaline hydrolysis'. O corpo do arcebispo anglicano Desmond Tutu passou por uma aquamação. Com base no texto, o processo em questão", alternativas: {A: "produz muito mais poluentes do que a cremação", B: "não emite os gases que provocam o efeito estufa", C: "é conhecido popularmente como hidrólise alcalina", D: "foi determinado pelos familiares de Desmond Tutu", E: "requer mais energia do que a cremação tradicional"}},
+        ];
+        
+        let pdfDoc = null;
+        let paginaPDFAtual = 1;
+        
+        async function carregarQuestoes() {
+            try {
+                // Tentar carregar do arquivo JSON
+                const response = await fetch('simulado_otimizado.json');
+                const dados = await response.json();
+                questoes = dados.questoes;
+                gabarito = dados.gabarito;
+            } catch(e) {
+                // Usar exemplo se não conseguir carregar
+                questoes = QUESTOES_EXEMPLO;
+                gabarito = GABARITO;
+                console.log('Usando questões exemplo');
+            }
+            
+            // Preencher com questões até 90
+            while(questoes.length < 90) {
+                const num = questoes.length + 1;
+                questoes.push({
+                    numero: num,
+                    enunciado: `[Questão ${num}] - Abra o PDF ao lado para visualizar o enunciado completo com imagens e gráficos.`,
+                    alternativas: {A: "Opção A", B: "Opção B", C: "Opção C", D: "Opção D", E: "Opção E"}
+                });
+            }
+            
+            renderizarQuestao();
+            carregarPDF();
+        }
+        
+        async function carregarPDF() {
+            try {
+                // Tenta carregar o primeiro PDF disponível
+                const pdfs = [
+                    '1º_SIMULADO_ENEM_ARI_-_LCST_e_CHST_-__2022__1_.pdf',
+                    '1º_SIMULADO_ENEM_ARI_-_MT_e_CNST_-__2022.pdf'
+                ];
+                
+                // Usar o primeiro PDF
+                pdfDoc = await pdfjsLib.getDocument(pdfs[0]).promise;
+                renderizarPaginaPDF(1);
+            } catch(e) {
+                document.getElementById('pdf-canvas').parentElement.innerHTML = '<p style="color: #999;">PDF não carregado. Baixe os arquivos PDF originais e abra-os para visualizar as imagens.</p>';
+            }
+        }
+        
+        async function renderizarPaginaPDF(numPagina) {
+            if(!pdfDoc) return;
+            
+            if(numPagina < 1 || numPagina > pdfDoc.numPages) return;
+            
+            paginaPDFAtual = numPagina;
+            const pagina = await pdfDoc.getPage(numPagina);
+            
+            const canvas = document.getElementById('pdf-canvas');
+            const contexto = canvas.getContext('2d');
+            const viewport = pagina.getViewport({scale: 1.5});
+            
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            
+            await pagina.render({canvasContext: contexto, viewport: viewport}).promise;
+            
+            document.getElementById('pdf-pagina').textContent = `Página ${numPagina} de ${pdfDoc.numPages}`;
+        }
+        
+        function proximaPDF() {
+            renderizarPaginaPDF(paginaPDFAtual + 1);
+        }
+        
+        function anteriorPDF() {
+            renderizarPaginaPDF(paginaPDFAtual - 1);
+        }
+        
+        function renderizarQuestao() {
+            const q = questoes[questaoAtual];
+            const respondida = respostas[questaoAtual];
+            const gabaritoQ = GABARITO[questaoAtual + 1];
+            
+            const progressoPct = Math.round(((questaoAtual + 1) / 90) * 100);
+            document.getElementById('progress').style.width = progressoPct + '%';
+            document.getElementById('questao-numero').textContent = questaoAtual + 1;
+            document.getElementById('percentual').textContent = progressoPct + '%';
+            
+            let html = `
+                <div class="questao-box">
+                    <div class="questao-numero"><strong>QUESTÃO ${q.numero}</strong></div>
+                    <div class="enunciado">${q.enunciado}</div>
+                    
+                    <div class="alternativas">
+            `;
+            
+            ['A','B','C','D','E'].forEach(letra => {
+                const selecionada = respondida === letra;
+                const correta = gabaritoQ === letra;
+                const mostraResultado = respondida !== undefined;
+                
+                let classe = 'alternativa';
+                if(mostraResultado) {
+                    if(selecionada && correta) classe += ' correta';
+                    else if(selecionada && !correta) classe += ' incorreta';
+                    else if(!selecionada && correta) classe += ' correta';
+                    else if(selecionada) classe += ' selecionada';
+                } else if(selecionada) {
+                    classe += ' selecionada';
+                }
+                
+                const onclick = mostraResultado ? '' : `onclick="selecionarResposta('${letra}')"`;
+                
+                html += `
+                    <div class="${classe}" ${onclick}>
+                        <strong>${letra})</strong> ${q.alternativas[letra]}
+                        ${mostraResultado && correta && !selecionada ? ' ✓' : ''}
+                        ${mostraResultado && selecionada && correta ? ' ✓' : ''}
+                        ${mostraResultado && selecionada && !correta ? ' ✗' : ''}
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            
+            if(respondida) {
+                html += `
+                    <div class="gabarito-info">
+                        <strong>Gabarito:</strong> ${gabaritoQ}
+                    </div>
+                `;
+            }
+            
+            html += `
+                <div class="botoes">
+                    <button class="btn" ${questaoAtual === 0 ? 'disabled' : 'onclick="questaoAnterior()"'}>← Anterior</button>
+                    ${respondida ? `
+                        <button class="btn btn-proximo" onclick="proximaQuestao()">
+                            ${questaoAtual === 89 ? 'Ver resultado →' : 'Próxima →'}
+                        </button>
+                    ` : `<button class="btn btn-proximo" disabled>Responda para continuar</button>`}
+                </div>
+            `;
+            
+            document.getElementById('conteudo').innerHTML = html;
+        }
+        
+        function selecionarResposta(letra) {
+            respostas[questaoAtual] = letra;
+            const gabaritoQ = GABARITO[questaoAtual + 1];
+            if(letra === gabaritoQ) {
+                totalAcertos++;
+            }
+            renderizarQuestao();
+        }
+        
+        function proximaQuestao() {
+            if(questaoAtual < 89) {
+                questaoAtual++;
+                renderizarQuestao();
+                // Auto-scroll PDF para próxima página relevante
+                if(pdfDoc && paginaPDFAtual < pdfDoc.numPages) {
+                    renderizarPaginaPDF(paginaPDFAtual + 1);
+                }
+            } else {
+                mostrarResultado();
+            }
+        }
+        
+        function questaoAnterior() {
+            if(questaoAtual > 0) {
+                questaoAtual--;
+                renderizarQuestao();
+                if(paginaPDFAtual > 1) {
+                    renderizarPaginaPDF(paginaPDFAtual - 1);
+                }
+            }
+        }
+        
+        function mostrarResultado() {
+            const pct = Math.round((totalAcertos / 90) * 100);
+            
+            let html = `
+                <div class="resultado-final">
+                    <h2 style="font-size: 24px; margin-bottom: 1rem;">Simulado Finalizado!</h2>
+                    <div class="score">${totalAcertos}/90</div>
+                    <div class="mensagem">Você acertou <strong>${pct}%</strong> das questões</div>
+                    <p style="font-size: 14px; color: #999; margin-bottom: 2rem;">
+                        ${pct >= 70 ? '🎉 Excelente desempenho!' : pct >= 50 ? '👍 Bom começo! Continue estudando.' : '💪 Continue praticando, você consegue!'}
+                    </p>
+                    <button class="reiniciar-btn" onclick="reiniciar()">Refazer Simulado</button>
+                </div>
+            `;
+            
+            document.getElementById('conteudo').innerHTML = html;
+        }
+        
+        function reiniciar() {
+            questaoAtual = 0;
+            respostas = {};
+            totalAcertos = 0;
+            renderizarQuestao();
+            if(pdfDoc) renderizarPaginaPDF(1);
+        }
+        
+        // Inicializar
+        carregarQuestoes();
+    </script>
+</body>
+</html>
