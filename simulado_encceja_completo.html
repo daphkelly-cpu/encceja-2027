@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado ENCCEJA 2027 Completo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .titulo { font-size: 20px; font-weight: bold; }
+        .cronometro { 
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .seletor-disciplina {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .btn-disciplina {
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-disciplina:hover { background: #667eea; color: white; }
+        .btn-disciplina.ativo { background: #667eea; color: white; }
+        .botoes { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            flex: 1;
+        }
+        .btn-pausar { background: #FFD700; color: #333; }
+        .btn-finalizar { background: #4CAF50; color: white; }
+        .btn-fechar { background: #f44336; color: white; }
+        .btn:hover { opacity: 0.9; }
+        .questao {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+        }
+        .questao-titulo {
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #333;
+        }
+        .opcao {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .opcao:hover { background: #e8e8ff; }
+        .opcao input { margin-right: 10px; cursor: pointer; width: 18px; height: 18px; }
+        .opcao label { cursor: pointer; flex: 1; }
+        .resultado {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 10px;
+        }
+        .resultado-titulo { font-size: 28px; font-weight: bold; color: #2e7d32; margin-bottom: 15px; }
+        .resultado-percentual { font-size: 56px; font-weight: bold; color: #4CAF50; margin: 20px 0; }
+        .resultado-texto { font-size: 18px; margin: 10px 0; color: #333; }
+        #conteudo { max-height: 650px; overflow-y: auto; margin-bottom: 10px; }
+        .progresso { text-align: center; margin-top: 10px; color: #666; font-size: 14px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="titulo" id="titulo">Simulado ENCCEJA 2027</div>
+            <div class="cronometro" id="cronometro">01:00:00</div>
+        </div>
+
+        <div class="seletor-disciplina">
+            <button class="btn-disciplina ativo" onclick="mudarDisciplina('MT')">📊 Matemática</button>
+            <button class="btn-disciplina" onclick="mudarDisciplina('CN')">🔬 Ciências Naturais</button>
+            <button class="btn-disciplina" onclick="mudarDisciplina('CH')">📚 Ciências Humanas</button>
+            <button class="btn-disciplina" onclick="mudarDisciplina('LG')">✍️ Linguagens</button>
+            <button class="btn-disciplina" onclick="mudarDisciplina('FINAL')">🎓 Simulado Final</button>
+        </div>
+
+        <div class="botoes">
+            <button class="btn btn-pausar" id="btnPausar">⏸️ Pausar</button>
+            <button class="btn btn-finalizar" id="btnFinalizar">✅ Finalizar</button>
+            <button class="btn btn-fechar" id="btnFechar">❌ Fechar</button>
+        </div>
+
+        <div id="conteudo"></div>
+        <div class="progresso"><span id="progresso">Carregando...</span></div>
+    </div>
+
+    <script>
+        // MATEMÁTICA (25 questões)
+        const questoesMT = [
+            {numero: 1, texto: "Um pescador troca 2 aves por 3 peixes. Quantos peixes para 22 aves?", opcoes: [{letra: "A", texto: "15"}, {letra: "B", texto: "25"}, {letra: "C", texto: "33"}, {letra: "D", texto: "44"}, {letra: "E", texto: "55"}], resposta: "C"},
+            {numero: 2, texto: "Leite R$1,10/L, pão R$0,20. 2L leite + 5 pães = ?", opcoes: [{letra: "A", texto: "R$2,20"}, {letra: "B", texto: "R$2,40"}, {letra: "C", texto: "R$3,00"}, {letra: "D", texto: "R$3,20"}, {letra: "E", texto: "R$4,00"}], resposta: "C"},
+            {numero: 3, texto: "Qual problema histórico influenciou a Matemática?", opcoes: [{letra: "A", texto: "Comparar quantidades"}, {letra: "B", texto: "Construir edifícios"}, {letra: "C", texto: "Criar arte"}, {letra: "D", texto: "Escrever histórias"}, {letra: "E", texto: "Compor músicas"}], resposta: "A"},
+            {numero: 4, texto: "Vantagem da linguagem matemática?", opcoes: [{letra: "A", texto: "Mais fácil"}, {letra: "B", texto: "Independente da língua"}, {letra: "C", texto: "Mais complicada"}, {letra: "D", texto: "Sem erros"}, {letra: "E", texto: "Substitui fala"}], resposta: "B"},
+            {numero: 5, texto: "Lucro R$50.000 entre 8 sócios?", opcoes: [{letra: "A", texto: "R$5.000"}, {letra: "B", texto: "R$6.000"}, {letra: "C", texto: "R$6.250"}, {letra: "D", texto: "R$7.500"}, {letra: "E", texto: "R$8.000"}], resposta: "C"},
+            {numero: 6, texto: "Terreno 25m × 15m = ?", opcoes: [{letra: "A", texto: "40m²"}, {letra: "B", texto: "375m²"}, {letra: "C", texto: "400m²"}, {letra: "D", texto: "500m²"}, {letra: "E", texto: "625m²"}], resposta: "B"},
+            {numero: 7, texto: "Desconto 20% em R$80?", opcoes: [{letra: "A", texto: "R$16"}, {letra: "B", texto: "R$48"}, {letra: "C", texto: "R$60"}, {letra: "D", texto: "R$64"}, {letra: "E", texto: "R$72"}], resposta: "D"},
+            {numero: 8, texto: "60% de 30 alunos = ?", opcoes: [{letra: "A", texto: "10"}, {letra: "B", texto: "15"}, {letra: "C", texto: "18"}, {letra: "D", texto: "20"}, {letra: "E", texto: "24"}], resposta: "C"},
+            {numero: 9, texto: "Proporção 3:5, 18 homens = ? mulheres", opcoes: [{letra: "A", texto: "25"}, {letra: "B", texto: "27"}, {letra: "C", texto: "30"}, {letra: "D", texto: "36"}, {letra: "E", texto: "45"}], resposta: "C"},
+            {numero: 10, texto: "240 km em 3 horas = ? km/h", opcoes: [{letra: "A", texto: "60"}, {letra: "B", texto: "75"}, {letra: "C", texto: "80"}, {letra: "D", texto: "90"}, {letra: "E", texto: "120"}], resposta: "C"},
+            {numero: 11, texto: "Aumento R$10.000 para R$12.000?", opcoes: [{letra: "A", texto: "10%"}, {letra: "B", texto: "15%"}, {letra: "C", texto: "20%"}, {letra: "D", texto: "25%"}, {letra: "E", texto: "30%"}], resposta: "C"},
+            {numero: 12, texto: "Gasto 40% de R$150, restam?", opcoes: [{letra: "A", texto: "R$40"}, {letra: "B", texto: "R$60"}, {letra: "C", texto: "R$90"}, {letra: "D", texto: "R$110"}, {letra: "E", texto: "R$120"}], resposta: "C"},
+            {numero: 13, texto: "Quadrado lado 5cm - perímetro?", opcoes: [{letra: "A", texto: "10cm"}, {letra: "B", texto: "15cm"}, {letra: "C", texto: "20cm"}, {letra: "D", texto: "25cm"}, {letra: "E", texto: "30cm"}], resposta: "C"},
+            {numero: 14, texto: "R$2.000/mês, 30% aluguel?", opcoes: [{letra: "A", texto: "R$300"}, {letra: "B", texto: "R$400"}, {letra: "C", texto: "R$500"}, {letra: "D", texto: "R$600"}, {letra: "E", texto: "R$700"}], resposta: "D"},
+            {numero: 15, texto: "R$100 virou R$75 - desconto?", opcoes: [{letra: "A", texto: "15%"}, {letra: "B", texto: "20%"}, {letra: "C", texto: "25%"}, {letra: "D", texto: "30%"}, {letra: "E", texto: "35%"}], resposta: "C"},
+            {numero: 16, texto: "80 de 100 passaram - probabilidade?", opcoes: [{letra: "A", texto: "40%"}, {letra: "B", texto: "50%"}, {letra: "C", texto: "60%"}, {letra: "D", texto: "80%"}, {letra: "E", texto: "90%"}], resposta: "D"},
+            {numero: 17, texto: "Aumento 10% em R$1.500?", opcoes: [{letra: "A", texto: "R$1.550"}, {letra: "B", texto: "R$1.600"}, {letra: "C", texto: "R$1.650"}, {letra: "D", texto: "R$1.750"}, {letra: "E", texto: "R$1.800"}], resposta: "C"},
+            {numero: 18, texto: "Média 3 números = 10, com 8 e 12 - terceiro?", opcoes: [{letra: "A", texto: "8"}, {letra: "B", texto: "10"}, {letra: "C", texto: "12"}, {letra: "D", texto: "14"}, {letra: "E", texto: "20"}], resposta: "B"},
+            {numero: 19, texto: "24 unidades × R$2,50?", opcoes: [{letra: "A", texto: "R$30"}, {letra: "B", texto: "R$50"}, {letra: "C", texto: "R$60"}, {letra: "D", texto: "R$70"}, {letra: "E", texto: "R$80"}], resposta: "C"},
+            {numero: 20, texto: "Triângulo base 10, altura 6?", opcoes: [{letra: "A", texto: "15cm²"}, {letra: "B", texto: "20cm²"}, {letra: "C", texto: "30cm²"}, {letra: "D", texto: "60cm²"}, {letra: "E", texto: "120cm²"}], resposta: "C"},
+            {numero: 21, texto: "3 camisetas R$40, 25% desc na 3ª?", opcoes: [{letra: "A", texto: "R$100"}, {letra: "B", texto: "R$110"}, {letra: "C", texto: "R$120"}, {letra: "D", texto: "R$130"}, {letra: "E", texto: "R$140"}], resposta: "B"},
+            {numero: 22, texto: "População 50k → 55k = ?%", opcoes: [{letra: "A", texto: "5%"}, {letra: "B", texto: "10%"}, {letra: "C", texto: "15%"}, {letra: "D", texto: "20%"}, {letra: "E", texto: "25%"}], resposta: "B"},
+            {numero: 23, texto: "Reservatório 1000L, 35% consumido = ?", opcoes: [{letra: "A", texto: "350L"}, {letra: "B", texto: "500L"}, {letra: "C", texto: "650L"}, {letra: "D", texto: "750L"}, {letra: "E", texto: "850L"}], resposta: "C"},
+            {numero: 24, texto: "Escada 60°, chão 3m = comprimento?", opcoes: [{letra: "A", texto: "3m"}, {letra: "B", texto: "4m"}, {letra: "C", texto: "5m"}, {letra: "D", texto: "6m"}, {letra: "E", texto: "7m"}], resposta: "D"},
+            {numero: 25, texto: "Investimento R$1.000, 5%/mês?", opcoes: [{letra: "A", texto: "R$50"}, {letra: "B", texto: "R$100"}, {letra: "C", texto: "R$150"}, {letra: "D", texto: "R$200"}, {letra: "E", texto: "R$250"}], resposta: "A"},
+        ];
+
+        // CIÊNCIAS NATURAIS (25 questões)
+        const questoesCN = [
+            {numero: 1, texto: "Ciência como construção humana - principal característica?", opcoes: [{letra: "A", texto: "Rapidez"}, {letra: "B", texto: "Método científico"}, {letra: "C", texto: "Quantidade pessoas"}, {letra: "D", texto: "Acesso"}, {letra: "E", texto: "Tecnologia"}], resposta: "B"},
+            {numero: 2, texto: "Primeira etapa método científico?", opcoes: [{letra: "A", texto: "Experimento"}, {letra: "B", texto: "Observação"}, {letra: "C", texto: "Publicação"}, {letra: "D", texto: "Análise"}, {letra: "E", texto: "Conclusão"}], resposta: "B"},
+            {numero: 3, texto: "Velocidade luz vácuo?", opcoes: [{letra: "A", texto: "150.000"}, {letra: "B", texto: "200.000"}, {letra: "C", texto: "300.000"}, {letra: "D", texto: "400.000"}, {letra: "E", texto: "500.000"}], resposta: "C"},
+            {numero: 4, texto: "Dobrar velocidade = energia cinética ?", opcoes: [{letra: "A", texto: "Dobra"}, {letra: "B", texto: "Quadruplica"}, {letra: "C", texto: "Metade"}, {letra: "D", texto: "Quarto"}, {letra: "E", texto: "Desaparece"}], resposta: "B"},
+            {numero: 5, texto: "Número atômico oxigênio?", opcoes: [{letra: "A", texto: "6"}, {letra: "B", texto: "7"}, {letra: "C", texto: "8"}, {letra: "D", texto: "9"}, {letra: "E", texto: "10"}], resposta: "C"},
+            {numero: 6, texto: "Tabela periódica critério organização?", opcoes: [{letra: "A", texto: "Alfabética"}, {letra: "B", texto: "Nêutrons"}, {letra: "C", texto: "Prótons"}, {letra: "D", texto: "Descoberta"}, {letra: "E", texto: "Cor"}], resposta: "C"},
+            {numero: 7, texto: "Ácido + Base = ?", opcoes: [{letra: "A", texto: "Água"}, {letra: "B", texto: "Sal água"}, {letra: "C", texto: "CO2"}, {letra: "D", texto: "Hidróxido"}, {letra: "E", texto: "Óxido"}], resposta: "B"},
+            {numero: 8, texto: "Célula eucariótica estrutura?", opcoes: [{letra: "A", texto: "Ribossomo"}, {letra: "B", texto: "Núcleo"}, {letra: "C", texto: "Parede"}, {letra: "D", texto: "Clorofila"}, {letra: "E", texto: "Flagelo"}], resposta: "B"},
+            {numero: 9, texto: "Mitose DNA ?", opcoes: [{letra: "A", texto: "Duplica distribui"}, {letra: "B", texto: "Elimina"}, {letra: "C", texto: "Reduz metade"}, {letra: "D", texto: "Fica imóvel"}, {letra: "E", texto: "Multiplica x4"}], resposta: "A"},
+            {numero: 10, texto: "Genes codificam material?", opcoes: [{letra: "A", texto: "RNA"}, {letra: "B", texto: "Proteína"}, {letra: "C", texto: "DNA"}, {letra: "D", texto: "Clorofila"}, {letra: "E", texto: "Hemoglobina"}], resposta: "C"},
+            {numero: 11, texto: "Cadeia alimentar começa?", opcoes: [{letra: "A", texto: "Consumidor"}, {letra: "B", texto: "Herbívoro"}, {letra: "C", texto: "Produtor"}, {letra: "D", texto: "Decompositor"}, {letra: "E", texto: "Predador"}], resposta: "C"},
+            {numero: 12, texto: "Papel decompositores?", opcoes: [{letra: "A", texto: "Fotossíntese"}, {letra: "B", texto: "Consumir"}, {letra: "C", texto: "Decompor nutrientes"}, {letra: "D", texto: "Controlar população"}, {letra: "E", texto: "Capturar luz"}], resposta: "C"},
+            {numero: 13, texto: "Maior ameaça biodiversidade?", opcoes: [{letra: "A", texto: "Predadores"}, {letra: "B", texto: "Degradação habitat"}, {letra: "C", texto: "Migração"}, {letra: "D", texto: "Variações naturais"}, {letra: "E", texto: "Competição"}], resposta: "B"},
+            {numero: 14, texto: "Subproduto fotossíntese?", opcoes: [{letra: "A", texto: "CO2"}, {letra: "B", texto: "Nitrogênio"}, {letra: "C", texto: "Oxigênio"}, {letra: "D", texto: "Água"}, {letra: "E", texto: "Calor"}], resposta: "C"},
+            {numero: 15, texto: "Aquecimento global gás?", opcoes: [{letra: "A", texto: "O2"}, {letra: "B", texto: "N2"}, {letra: "C", texto: "CO2"}, {letra: "D", texto: "He"}, {letra: "E", texto: "Ar"}], resposta: "C"},
+            {numero: 16, texto: "Saúde não determinante?", opcoes: [{letra: "A", texto: "Alimentação"}, {letra: "B", texto: "Atividade física"}, {letra: "C", texto: "Saneamento"}, {letra: "D", texto: "Cor pele"}, {letra: "E", texto: "Acesso saúde"}], resposta: "D"},
+            {numero: 17, texto: "Ozônio protege de?", opcoes: [{letra: "A", texto: "Gama"}, {letra: "B", texto: "Ultravioleta"}, {letra: "C", texto: "Infravermelha"}, {letra: "D", texto: "Visível"}, {letra: "E", texto: "Microonda"}], resposta: "B"},
+            {numero: 18, texto: "Pressão atmosférica MENOR?", opcoes: [{letra: "A", texto: "Mar"}, {letra: "B", texto: "Vale"}, {letra: "C", texto: "Montanha alta"}, {letra: "D", texto: "Caverna"}, {letra: "E", texto: "Poço"}], resposta: "C"},
+            {numero: 19, texto: "Conservação Energia acontece?", opcoes: [{letra: "A", texto: "Desaparece"}, {letra: "B", texto: "Transforma-se"}, {letra: "C", texto: "Duplica"}, {letra: "D", texto: "Fica inativa"}, {letra: "E", texto: "Diminui"}], resposta: "B"},
+            {numero: 20, texto: "Onda eletromagnética vs mecânica?", opcoes: [{letra: "A", texto: "Precisa meio"}, {letra: "B", texto: "Sem meio"}, {letra: "C", texto: "Vácuo"}, {letra: "D", texto: "Mais rápida"}, {letra: "E", texto: "Fixo"}], resposta: "C"},
+            {numero: 21, texto: "Resistência elétrica unidade?", opcoes: [{letra: "A", texto: "Ampère"}, {letra: "B", texto: "Volt"}, {letra: "C", texto: "Ohm"}, {letra: "D", texto: "Watt"}, {letra: "E", texto: "Joule"}], resposta: "C"},
+            {numero: 22, texto: "pH solução neutra?", opcoes: [{letra: "A", texto: "0"}, {letra: "B", texto: "5"}, {letra: "C", texto: "7"}, {letra: "D", texto: "10"}, {letra: "E", texto: "14"}], resposta: "C"},
+            {numero: 23, texto: "Ouro vs ferro densidade?", opcoes: [{letra: "A", texto: "Ferro"}, {letra: "B", texto: "Ouro"}, {letra: "C", texto: "Mesma"}, {letra: "D", texto: "Impossível"}, {letra: "E", texto: "Temperatura"}], resposta: "B"},
+            {numero: 24, texto: "Material condutor chamado?", opcoes: [{letra: "A", texto: "Isolante"}, {letra: "B", texto: "Semicondutor"}, {letra: "C", texto: "Condutor"}, {letra: "D", texto: "Magnético"}, {letra: "E", texto: "Transparente"}], resposta: "C"},
+            {numero: 25, texto: "Diferenciação celular controlada?", opcoes: [{letra: "A", texto: "Externos"}, {letra: "B", texto: "Genes ambiente"}, {letra: "C", texto: "Movimentos"}, {letra: "D", texto: "Tamanho"}, {letra: "E", texto: "Idade"}], resposta: "B"},
+        ];
+
+        // CIÊNCIAS HUMANAS (25 questões)
+        const questoesCH = [
+            {numero: 1, texto: "Identidade pessoal influência cultural?", opcoes: [{letra: "A", texto: "Nenhuma"}, {letra: "B", texto: "Aparência"}, {letra: "C", texto: "Valores visão"}, {letra: "D", texto: "Profissão"}, {letra: "E", texto: "Linguagem"}], resposta: "C"},
+            {numero: 2, texto: "Futebol cultura brasileira importância?", opcoes: [{letra: "A", texto: "Entretenimento"}, {letra: "B", texto: "Divisão"}, {letra: "C", texto: "Unidade coletiva"}, {letra: "D", texto: "Impedir mudança"}, {letra: "E", texto: "Nenhuma"}], resposta: "C"},
+            {numero: 3, texto: "Território define?", opcoes: [{letra: "A", texto: "Extensão"}, {letra: "B", texto: "Fronteiras"}, {letra: "C", texto: "População"}, {letra: "D", texto: "Minerais"}, {letra: "E", texto: "Clima"}], resposta: "B"},
+            {numero: 4, texto: "Ocupação desordenada consequência?", opcoes: [{letra: "A", texto: "Biodiversidade"}, {letra: "B", texto: "Ar limpo"}, {letra: "C", texto: "Degradação"}, {letra: "D", texto: "Clima estável"}, {letra: "E", texto: "Paz"}], resposta: "C"},
+            {numero: 5, texto: "Estado democracia função?", opcoes: [{letra: "A", texto: "Concentrar poder"}, {letra: "B", texto: "Garantir direitos"}, {letra: "C", texto: "Eliminar diferenças"}, {letra: "D", texto: "Controlar tudo"}, {letra: "E", texto: "Proibir liberdade"}], resposta: "B"},
+            {numero: 6, texto: "Direito humano básico?", opcoes: [{letra: "A", texto: "Escravidão"}, {letra: "B", texto: "Vida liberdade"}, {letra: "C", texto: "Prejudicar"}, {letra: "D", texto: "Discriminar"}, {letra: "E", texto: "Ignorar leis"}], resposta: "B"},
+            {numero: 7, texto: "Exercer cidadania plenamente?", opcoes: [{letra: "A", texto: "Pagar impostos"}, {letra: "B", texto: "Participar ativamente"}, {letra: "C", texto: "Aceitar tudo"}, {letra: "D", texto: "Indiferença"}, {letra: "E", texto: "Privilégios"}], resposta: "B"},
+            {numero: 8, texto: "Industrialização consequência social?", opcoes: [{letra: "A", texto: "Cidades diminuem"}, {letra: "B", texto: "Crescimento urbano"}, {letra: "C", texto: "Volta agrária"}, {letra: "D", texto: "Fim trabalho"}, {letra: "E", texto: "Sem classes"}], resposta: "B"},
+            {numero: 9, texto: "Globalização impacto positivo?", opcoes: [{letra: "A", texto: "Barreiras"}, {letra: "B", texto: "Isolamento"}, {letra: "C", texto: "Troca conhecimento"}, {letra: "D", texto: "Sem tecnologia"}, {letra: "E", texto: "Sem comunicação"}], resposta: "C"},
+            {numero: 10, texto: "Proclamação República Brasil ano?", opcoes: [{letra: "A", texto: "1822"}, {letra: "B", texto: "1850"}, {letra: "C", texto: "1889"}, {letra: "D", texto: "1930"}, {letra: "E", texto: "1964"}], resposta: "C"},
+            {numero: 11, texto: "Colonização portuguesa duração?", opcoes: [{letra: "A", texto: "100"}, {letra: "B", texto: "200"}, {letra: "C", texto: "300"}, {letra: "D", texto: "400"}, {letra: "E", texto: "500"}], resposta: "C"},
+            {numero: 12, texto: "Escravidão consequência?", opcoes: [{letra: "A", texto: "Igualdade"}, {letra: "B", texto: "Desigualdade racial"}, {letra: "C", texto: "Sem conflitos"}, {letra: "D", texto: "Desenvolvimento"}, {letra: "E", texto: "Democracia"}], resposta: "B"},
+            {numero: 13, texto: "Reforma agrária objetivo?", opcoes: [{letra: "A", texto: "Eliminar agricultura"}, {letra: "B", texto: "Latifundiários"}, {letra: "C", texto: "Justiça social"}, {letra: "D", texto: "Desemprego"}, {letra: "E", texto: "Reduzir produção"}], resposta: "C"},
+            {numero: 14, texto: "Trabalho infantil consequência?", opcoes: [{letra: "A", texto: "Educação"}, {letra: "B", texto: "Perda oportunidades"}, {letra: "C", texto: "Desenvolvimento"}, {letra: "D", texto: "Saúde"}, {letra: "E", texto: "Proteção"}], resposta: "B"},
+            {numero: 15, texto: "Constituição função?", opcoes: [{letra: "A", texto: "Cidades"}, {letra: "B", texto: "Direitos deveres"}, {letra: "C", texto: "Proibir leis"}, {letra: "D", texto: "Preços"}, {letra: "E", texto: "Clima"}], resposta: "B"},
+            {numero: 16, texto: "Combater discriminação racial?", opcoes: [{letra: "A", texto: "Ignorar"}, {letra: "B", texto: "Perpetuar"}, {letra: "C", texto: "Políticas inclusão"}, {letra: "D", texto: "Agravar"}, {letra: "E", texto: "Aceitar"}], resposta: "C"},
+            {numero: 17, texto: "Divisão internacional trabalho efeito?", opcoes: [{letra: "A", texto: "Igualdade"}, {letra: "B", texto: "Dependência"}, {letra: "C", texto: "Sem desigualdade"}, {letra: "D", texto: "Desenvolvimento"}, {letra: "E", texto: "Reduz pobreza"}], resposta: "B"},
+            {numero: 18, texto: "Sustentabilidade ambiental ação?", opcoes: [{letra: "A", texto: "Exploração ilimitada"}, {letra: "B", texto: "Poluição"}, {letra: "C", texto: "Preservação"}, {letra: "D", texto: "Desflorestamento"}, {letra: "E", texto: "Destruição"}], resposta: "C"},
+            {numero: 19, texto: "Migração interna Brasil causa?", opcoes: [{letra: "A", texto: "Melhores condições"}, {letra: "B", texto: "Isolamento"}, {letra: "C", texto: "Família"}, {letra: "D", texto: "Clima"}, {letra: "E", texto: "Paisagem"}], resposta: "A"},
+            {numero: 20, texto: "Mercosul objetivo?", opcoes: [{letra: "A", texto: "Impedir comércio"}, {letra: "B", texto: "Facilitar comércio"}, {letra: "C", texto: "Eliminar moedas"}, {letra: "D", texto: "Concentrar poder"}, {letra: "E", texto: "Reduzir comércio"}], resposta: "B"},
+            {numero: 21, texto: "Democracia princípio?", opcoes: [{letra: "A", texto: "Poder concentrado"}, {letra: "B", texto: "Participação povo"}, {letra: "C", texto: "Sem leis"}, {letra: "D", texto: "Líder único"}, {letra: "E", texto: "Sem direitos"}], resposta: "B"},
+            {numero: 22, texto: "Revolução Francesa consequência?", opcoes: [{letra: "A", texto: "Poder absoluto"}, {letra: "B", texto: "Liberdade igualdade"}, {letra: "C", texto: "Feudalismo"}, {letra: "D", texto: "Sem Europa"}, {letra: "E", texto: "Totalitarismo"}], resposta: "B"},
+            {numero: 23, texto: "Desigualdade renda extrema?", opcoes: [{letra: "A", texto: "Desenvolvimento"}, {letra: "B", texto: "Paz"}, {letra: "C", texto: "Redução conflitos"}, {letra: "D", texto: "Pobreza violência"}, {letra: "E", texto: "Educação"}], resposta: "D"},
+            {numero: 24, texto: "Educação importância social?", opcoes: [{letra: "A", texto: "Nenhuma"}, {letra: "B", texto: "Apenas dinheiro"}, {letra: "C", texto: "Cidadãos críticos"}, {letra: "D", texto: "Limita"}, {letra: "E", texto: "Causa desigualdade"}], resposta: "C"},
+            {numero: 25, texto: "ONU objetivo?", opcoes: [{letra: "A", texto: "Conflitos"}, {letra: "B", texto: "Domínio"}, {letra: "C", texto: "Paz internacional"}, {letra: "D", texto: "Eliminar diversidade"}, {letra: "E", texto: "Aumentar desigualdade"}], resposta: "C"},
+        ];
+
+        // LINGUAGENS (25 questões)
+        const questoesLG = [
+            {numero: 1, texto: "Na frase 'correr rapidamente', classe 'rapidamente'?", opcoes: [{letra: "A", texto: "Adjetivo"}, {letra: "B", texto: "Advérbio"}, {letra: "C", texto: "Substantivo"}, {letra: "D", texto: "Preposição"}, {letra: "E", texto: "Conjunção"}], resposta: "B"},
+            {numero: 2, texto: "Sinônimo de 'propósito'?", opcoes: [{letra: "A", texto: "Acaso"}, {letra: "B", texto: "Intenção"}, {letra: "C", texto: "Dúvida"}, {letra: "D", texto: "Engano"}, {letra: "E", texto: "Defeito"}], resposta: "B"},
+            {numero: 3, texto: "Exemplo de metáfora?", opcoes: [{letra: "A", texto: "Cão latiu"}, {letra: "B", texto: "Coração ouro"}, {letra: "C", texto: "Rua molhada"}, {letra: "D", texto: "Livro grande"}, {letra: "E", texto: "Cor azul"}], resposta: "B"},
+            {numero: 4, texto: "Tempo verbal 'estudaria'?", opcoes: [{letra: "A", texto: "Pretérito perfeito"}, {letra: "B", texto: "Presente"}, {letra: "C", texto: "Futuro pretérito"}, {letra: "D", texto: "Pretérito imperfeito"}, {letra: "E", texto: "Futuro presente"}], resposta: "C"},
+            {numero: 5, texto: "Vírgula serve para?", opcoes: [{letra: "A", texto: "Terminar frases"}, {letra: "B", texto: "Separar enumeração"}, {letra: "C", texto: "Fazer pergunta"}, {letra: "D", texto: "Expressar espanto"}, {letra: "E", texto: "Iniciar parágrafos"}], resposta: "B"},
+            {numero: 6, texto: "Oração principal 'gato dormia quando acordou'?", opcoes: [{letra: "A", texto: "Gato dormia"}, {letra: "B", texto: "Quando acordou"}, {letra: "C", texto: "Acordou"}, {letra: "D", texto: "Gato dormia quando"}, {letra: "E", texto: "Dormia"}], resposta: "A"},
+            {numero: 7, texto: "Aliteração exemplo?", opcoes: [{letra: "A", texto: "Parede vermelha"}, {letra: "B", texto: "Brisa branda beija"}, {letra: "C", texto: "Menino inteligente"}, {letra: "D", texto: "Árvore cresce"}, {letra: "E", texto: "Corri rápido"}], resposta: "B"},
+            {numero: 8, texto: "Sujeito 'Chegaram notícias'?", opcoes: [{letra: "A", texto: "Notícias"}, {letra: "B", texto: "Capital"}, {letra: "C", texto: "Chegaram"}, {letra: "D", texto: "Da capital"}, {letra: "E", texto: "Indeterminado"}], resposta: "A"},
+            {numero: 9, texto: "Conjunção 'não gosto nem'?", opcoes: [{letra: "A", texto: "De"}, {letra: "B", texto: "Nem"}, {letra: "C", texto: "Não"}, {letra: "D", texto: "Gosto"}, {letra: "E", texto: "Laranja"}], resposta: "B"},
+            {numero: 10, texto: "Complete 'Eu ___ que viesse'?", opcoes: [{letra: "A", texto: "queria"}, {letra: "B", texto: "queria que"}, {letra: "C", texto: "quereria"}, {letra: "D", texto: "quereira"}, {letra: "E", texto: "queriera"}], resposta: "A"},
+            {numero: 11, texto: "'Homem prevenido vale dois' figura?", opcoes: [{letra: "A", texto: "Metáfora"}, {letra: "B", texto: "Metonímia"}, {letra: "C", texto: "Provérbio"}, {letra: "D", texto: "Hipérbole"}, {letra: "E", texto: "Sinestesia"}], resposta: "C"},
+            {numero: 12, texto: "Complemento 'Maria comprou livro'?", opcoes: [{letra: "A", texto: "Maria"}, {letra: "B", texto: "Comprou"}, {letra: "C", texto: "Um livro"}, {letra: "D", texto: "De um livro"}, {letra: "E", texto: "Comprou um"}], resposta: "C"},
+            {numero: 13, texto: "Voz passiva 'cachorro comeu bolo'?", opcoes: [{letra: "A", texto: "Bolo comido"}, {letra: "B", texto: "Bolo comeu cachorro"}, {letra: "C", texto: "Comeu-se bolo"}, {letra: "D", texto: "Cachorro comido"}, {letra: "E", texto: "Bolo comer"}], resposta: "A"},
+            {numero: 14, texto: "'Estudei muito' classe 'muito'?", opcoes: [{letra: "A", texto: "Adjetivo"}, {letra: "B", texto: "Advérbio"}, {letra: "C", texto: "Substantivo"}, {letra: "D", texto: "Preposição"}, {letra: "E", texto: "Conjunção"}], resposta: "B"},
+            {numero: 15, texto: "Antítese exemplo?", opcoes: [{letra: "A", texto: "Noite escura"}, {letra: "B", texto: "Ouro pedra"}, {letra: "C", texto: "Casa linda"}, {letra: "D", texto: "Vida morte"}, {letra: "E", texto: "Corri muito"}], resposta: "D"},
+            {numero: 16, texto: "Erro concordância?", opcoes: [{letra: "A", texto: "Meninos cansados"}, {letra: "B", texto: "Professora ensina bem"}, {letra: "C", texto: "Alunos estudam"}, {letra: "D", texto: "Acordei fui aula"}, {letra: "E", texto: "Nós amigos"}], resposta: "D"},
+            {numero: 17, texto: "Significado eufemismo?", opcoes: [{letra: "A", texto: "Expressão ofensiva"}, {letra: "B", texto: "Substituir desagradável suave"}, {letra: "C", texto: "Exagero intencional"}, {letra: "D", texto: "Repetição sons"}, {letra: "E", texto: "Descrição detalhada"}], resposta: "B"},
+            {numero: 18, texto: "Simple present inglês equivalente?", opcoes: [{letra: "A", texto: "Pretérito perfeito"}, {letra: "B", texto: "Presente indicativo"}, {letra: "C", texto: "Futuro"}, {letra: "D", texto: "Pretérito imperfeito"}, {letra: "E", texto: "Futuro pretérito"}], resposta: "B"},
+            {numero: 19, texto: "Tipo texto noticia informar?", opcoes: [{letra: "A", texto: "Narrativo"}, {letra: "B", texto: "Descritivo"}, {letra: "C", texto: "Jornalístico"}, {letra: "D", texto: "Poético"}, {letra: "E", texto: "Dramático"}], resposta: "C"},
+            {numero: 20, texto: "'Olhos azuis como céu' estrutura?", opcoes: [{letra: "A", texto: "Metáfora"}, {letra: "B", texto: "Símile"}, {letra: "C", texto: "Metonímia"}, {letra: "D", texto: "Hipérbole"}, {letra: "E", texto: "Antítese"}], resposta: "B"},
+            {numero: 21, texto: "Homophones vs homographs?", opcoes: [{letra: "A", texto: "Mesma grafia som diferente"}, {letra: "B", texto: "Mesma grafia som"}, {letra: "C", texto: "Mesmo som grafia diferente"}, {letra: "D", texto: "Mesmo idioma"}, {letra: "E", texto: "Plural singular"}], resposta: "C"},
+            {numero: 22, texto: "Adjunto adverbial 'caminhei floresta'?", opcoes: [{letra: "A", texto: "Caminhei"}, {letra: "B", texto: "Pela"}, {letra: "C", texto: "Pela floresta"}, {letra: "D", texto: "Floresta"}, {letra: "E", texto: "A"}], resposta: "C"},
+            {numero: 23, texto: "Onomatopeia exemplo?", opcoes: [{letra: "A", texto: "Livro interessante"}, {letra: "B", texto: "Cão au au"}, {letra: "C", texto: "Menina correu"}, {letra: "D", texto: "Filme chato"}, {letra: "E", texto: "Ele alto"}], resposta: "B"},
+            {numero: 24, texto: "Oração subordinada 'preciso ajude'?", opcoes: [{letra: "A", texto: "Preciso"}, {letra: "B", texto: "Que você ajude"}, {letra: "C", texto: "Me ajude"}, {letra: "D", texto: "Você"}, {letra: "E", texto: "Ajude"}], resposta: "B"},
+            {numero: 25, texto: "Gênero receita culinária?", opcoes: [{letra: "A", texto: "Narrativo"}, {letra: "B", texto: "Expositivo"}, {letra: "C", texto: "Injuntivo"}, {letra: "D", texto: "Argumentativo"}, {letra: "E", texto: "Descritivo"}], resposta: "C"},
+        ];
+
+        // Simulado Final (100 questões = mix de todas)
+        const questoesFINAL = [...questoesMT, ...questoesCN, ...questoesCH, ...questoesLG];
+
+        const bancos = {
+            'MT': {nome: '📊 Matemática (25 questões)', questoes: questoesMT, tempo: 3600},
+            'CN': {nome: '🔬 Ciências Naturais (25 questões)', questoes: questoesCN, tempo: 3600},
+            'CH': {nome: '📚 Ciências Humanas (25 questões)', questoes: questoesCH, tempo: 3600},
+            'LG': {nome: '✍️ Linguagens (25 questões)', questoes: questoesLG, tempo: 3600},
+            'FINAL': {nome: '🎓 Simulado Final (100 questões)', questoes: questoesFINAL, tempo: 7200},
+        };
+
+        let disciplinaAtual = 'MT';
+        let respostas = {};
+        let tempoRestante = 3600;
+        let ativo = true;
+
+        function mudarDisciplina(tipo) {
+            disciplinaAtual = tipo;
+            respostas = {};
+            tempoRestante = bancos[tipo].tempo;
+            ativo = true;
+            
+            document.querySelectorAll('.btn-disciplina').forEach(btn => btn.classList.remove('ativo'));
+            event.target.classList.add('ativo');
+            
+            renderizar();
+            atualizarProgresso();
+        }
+
+        function renderizar() {
+            const conteudo = document.getElementById('conteudo');
+            const questoes = bancos[disciplinaAtual].questoes;
+            const titulo = bancos[disciplinaAtual].nome;
+            
+            document.getElementById('titulo').textContent = titulo;
+            conteudo.innerHTML = '';
+            
+            questoes.forEach(q => {
+                const div = document.createElement('div');
+                div.className = 'questao';
+                
+                let html = `<div class="questao-titulo">Q${q.numero}: ${q.texto}</div>`;
+                q.opcoes.forEach(op => {
+                    html += `<div class="opcao">
+                        <input type="radio" name="q${q.numero}" value="${op.letra}" id="q${q.numero}_${op.letra}" onchange="salvarResposta(${q.numero}, '${op.letra}')">
+                        <label for="q${q.numero}_${op.letra}">${op.letra}) ${op.texto}</label>
+                    </div>`;
+                });
+                
+                div.innerHTML = html;
+                conteudo.appendChild(div);
+            });
+        }
+
+        window.salvarResposta = function(num, letra) {
+            respostas[num] = letra;
+            atualizarProgresso();
+        };
+
+        function atualizarProgresso() {
+            const questoes = bancos[disciplinaAtual].questoes;
+            const respondidas = Object.keys(respostas).length;
+            document.getElementById('progresso').textContent = `${respondidas} de ${questoes.length} respondidas`;
+        }
+
+        // Cronômetro
+        setInterval(() => {
+            if (!ativo) return;
+            tempoRestante--;
+            const h = Math.floor(tempoRestante / 3600);
+            const m = Math.floor((tempoRestante % 3600) / 60);
+            const s = tempoRestante % 60;
+            document.getElementById('cronometro').textContent = 
+                `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            if (tempoRestante <= 0) finalizar();
+        }, 1000);
+
+        // Botões
+        document.getElementById('btnPausar').onclick = () => {
+            ativo = !ativo;
+            document.getElementById('btnPausar').textContent = ativo ? '⏸️ Pausar' : '▶️ Retomar';
+        };
+
+        document.getElementById('btnFinalizar').onclick = finalizar;
+        
+        document.getElementById('btnFechar').onclick = () => window.close();
+
+        function finalizar() {
+            ativo = false;
+            const questoes = bancos[disciplinaAtual].questoes;
+            const acertos = questoes.filter(q => respostas[q.numero] === q.resposta).length;
+            const percentual = Math.round((acertos / questoes.length) * 100);
+            
+            document.getElementById('conteudo').innerHTML = `
+                <div class="resultado">
+                    <div class="resultado-titulo">Simulado Finalizado! 🎉</div>
+                    <div class="resultado-texto">Acertos: <strong>${acertos} de ${questoes.length}</strong></div>
+                    <div class="resultado-percentual">${percentual}%</div>
+                    <div class="resultado-texto">
+                        ${percentual >= 70 ? 'Excelente desempenho! Parabéns! 🌟' : 
+                          percentual >= 50 ? 'Bom esforço! Continue estudando! 💪' : 
+                          'Revisar os conteúdos ajudará! 📖'}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Iniciar
+        renderizar();
+        atualizarProgresso();
+    </script>
+</body>
+</html>

@@ -1,23 +1,19 @@
-# Logs
-*.log
-npm-debug.log*
-
-# Dependências
-node_modules/
-package-lock.json
-yarn.lock
-
-# OS
-.DS_Store
+﻿# Arquivos do Windows
 Thumbs.db
+*.tmp
+*.log
+
+# IDEs
 .vscode/
 .idea/
 
-# Temp
-*.tmp
-*.temp
-.sass-cache/
+# Tokens e chaves (SEGURANÇA)
+TOKEN*.txt
+*.key
+*.env
 
-# Builds
-dist/
-build/
+# Backups obsoletos
+*-backup.html
+*-old.html
+simulado_hibrido*.html
+ENCCEJA_2027_NOVO.html
