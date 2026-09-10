@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENCCEJA 2027 - Plano + Simulados + 180 Vídeos YouTube</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-top h1 {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-section {
+            margin-top: 15px;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #progressFill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        /* ABAS */
+        .tabs-container {
+            background: white;
+            border-radius: 15px;
+            padding: 0;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .tabs-header {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .tab-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-content {
+            padding: 30px 40px;
+            display: none;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARDS SEMANAS */
+        .semana-card {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .semana-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .semana-header {
+            padding: 20px;
+            border-left: 5px solid;
+            background: #fafafa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .semana-header h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .semana-header p {
+            font-size: 13px;
+            color: #999;
+            margin: 0;
+        }
+
+        .semana-header.matematica { border-left-color: #4ECDC4; }
+        .semana-header.cn { border-left-color: #9B59B6; }
+        .semana-header.ch { border-left-color: #45B7D1; }
+        .semana-header.lg { border-left-color: #FF6B6B; }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge.matematica { background: #4ECDC4; }
+        .badge.cn { background: #9B59B6; }
+        .badge.ch { background: #45B7D1; }
+        .badge.lg { background: #FF6B6B; }
+
+        .semana-content {
+            padding: 25px;
+            display: none;
+        }
+
+        .semana-content.active {
+            display: block;
+        }
+
+        .etapa {
+            margin-bottom: 25px;
+        }
+
+        .etapa-titulo {
+            font-size: 14px;
+            font-weight: 600;
+            color: #667eea;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .video-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .video-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: #667eea;
+            flex-shrink: 0;
+        }
+
+        .video-content {
+            flex-grow: 1;
+        }
+
+        .video-nome {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .video-link {
+            display: inline-block;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .video-link:hover {
+            transform: scale(1.05);
+        }
+
+        /* SIMULADOS */
+        .simulados-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .simulado-card {
+            border-radius: 12px;
+            padding: 30px;
+            cursor: pointer;
+            color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .simulado-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .simulado-card.mt {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44a08d 100%);
+        }
+
+        .simulado-card.cn {
+            background: linear-gradient(135deg, #9B59B6 0%, #7d3c98 100%);
+        }
+
+        .simulado-card.ch {
+            background: linear-gradient(135deg, #45B7D1 0%, #2980b9 100%);
+        }
+
+        .simulado-card.lg {
+            background: linear-gradient(135deg, #FF6B6B 0%, #e74c3c 100%);
+        }
+
+        .simulado-card.final {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            grid-column: 1 / -1;
+        }
+
+        .simulado-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .simulado-titulo {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .simulado-info {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .tabs-header {
+                flex-direction: column;
+            }
+            .tab-btn {
+                padding: 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-top">
+                <h1>📚 ENCCEJA 2027</h1>
+                <div style="text-align: right;">
+                    <p style="margin: 0; color: #999; font-size: 14px;">Plataforma Completa com 180 Vídeos</p>
+                </div>
+            </div>
+            <div class="progress-section">
+                <div class="progress-label">📊 Progresso Geral: <strong id="progressText">0/180 vídeos</strong></div>
+                <div class="progress-bar">
+                    <div id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABAS -->
+        <div class="tabs-container">
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="abrirAba('plano')">📖 Plano de Estudos (36 semanas)</button>
+                <button class="tab-btn" onclick="abrirAba('simulados')">🧪 Simulados</button>
+            </div>
+
+            <!-- ABA 1: PLANO -->
+            <div id="tab-plano" class="tab-content active">
+                <div id="semanas-container"></div>
+            </div>
+
+            <!-- ABA 2: SIMULADOS -->
+            <div id="tab-simulados" class="tab-content">
+                <div class="simulados-grid">
+                    <div class="simulado-card mt" onclick="abrirSimulado('MT')">
+                        <div class="simulado-icon">📐</div>
+                        <div class="simulado-titulo">Simulado Matemática</div>
+                        <div class="simulado-info">20 questões • 60 min</div>
+                    </div>
+                    <div class="simulado-card cn" onclick="abrirSimulado('CN')">
+                        <div class="simulado-icon">🧪</div>
+                        <div class="simulado-titulo">Simulado Ciências Naturais</div>
+                        <div class="simulado-info">20 questões • 60 min</div>
+                    </div>
+                    <div class="simulado-card ch" onclick="abrirSimulado('CH')">
+                        <div class="simulado-icon">📖</div>
+                        <div class="simulado-titulo">Simulado Ciências Humanas</div>
+                        <div class="simulado-info">20 questões • 60 min</div>
+                    </div>
+                    <div class="simulado-card lg" onclick="abrirSimulado('LG')">
+                        <div class="simulado-icon">✏️</div>
+                        <div class="simulado-titulo">Simulado Linguagens</div>
+                        <div class="simulado-info">18 questões • 60 min</div>
+                    </div>
+                    <div class="simulado-card final" onclick="abrirSimulado('FINAL')">
+                        <div class="simulado-icon">⭐</div>
+                        <div class="simulado-titulo">Simulado Final Completo</div>
+                        <div class="simulado-info">72 questões • 120 min</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== PLANO COM 180 VÍDEOS =====
+        const plano = [
+            // MATEMÁTICA (Semanas 1-9)
+            {sem: 1, bloco: "Matemática", topico: "História da Matemática", cor: "matematica", videos: [
+                {nome: "5 minutos que vão te surpreender! A História da Matemática", url: "https://www.youtube.com/watch?v=33UIRFqPTVg"},
+                {nome: "A História da Matemática - O Início", url: "https://www.youtube.com/watch?v=xxM_acVc5-0"},
+                {nome: "História dos Números", url: "https://www.youtube.com/watch?v=lOQtxvgto-Y"},
+                {nome: "A História da Matemática (Festival Video)", url: "https://www.youtube.com/watch?v=K9g7Vhe_5QU"},
+                {nome: "Números: Da História ao Hoje", url: "https://www.youtube.com/watch?v=FI2hFNGuTBU"}
+            ]},
+            {sem: 2, bloco: "Matemática", topico: "Lógica e Argumentação", cor: "matematica", videos: [
+                {nome: "LÓGICA PROPOSICIONAL: Revisão de Língua Portuguesa", url: "https://www.youtube.com/watch?v=KKnkTDaCL8c"},
+                {nome: "Lógica Matemática - Proposições e operações", url: "https://www.youtube.com/watch?v=pU4I8sC-2WM"},
+                {nome: "Proposição Lógica - Introdução", url: "https://www.youtube.com/watch?v=pdoX4erNMP8"},
+                {nome: "RACIOCÍNIO LÓGICO - PROPOSIÇÕES E TABELA VERDADE", url: "https://www.youtube.com/watch?v=KXm8Hi-I_G0"},
+                {nome: "Proposições Lógicas - Questões", url: "https://www.youtube.com/watch?v=ryxofLmdqeI"}
+            ]},
+            {sem: 3, bloco: "Matemática", topico: "Números Naturais", cor: "matematica", videos: [
+                {nome: "O que são números naturais?", url: "https://www.youtube.com/watch?v=1T8j0CTPYps"},
+                {nome: "Operações com números naturais", url: "https://www.youtube.com/watch?v=hC2YY0Zs-Cs"},
+                {nome: "Operações com números naturais - Exercícios", url: "https://www.youtube.com/watch?v=L93k3ecM1z4"},
+                {nome: "Expressões Numéricas", url: "https://www.youtube.com/watch?v=tzlGeqmCVUo"},
+                {nome: "NÚMEROS NATURAIS - EXERCÍCIOS", url: "https://www.youtube.com/watch?v=U6x0cfKj06s"}
+            ]},
+            {sem: 4, bloco: "Matemática", topico: "Frações e Decimais", cor: "matematica", videos: [
+                {nome: "COMO TRANSFORMAR FRAÇÃO EM NÚMERO DECIMAL", url: "https://www.youtube.com/watch?v=excWklaEb_E"},
+                {nome: "Como converter números decimais em fração", url: "https://www.youtube.com/watch?v=OP42bos1qSQ"},
+                {nome: "Transformar fração em decimal", url: "https://www.youtube.com/watch?v=TIjEtWND1Qw"},
+                {nome: "TRANSFORMAR NÚMERO DECIMAL EM FRAÇÃO", url: "https://www.youtube.com/watch?v=emMGMdlVUOo"},
+                {nome: "MÉTODO PRÁTICO", url: "https://www.youtube.com/watch?v=aJWyWbNhgvg"}
+            ]},
+            {sem: 5, bloco: "Matemática", topico: "Geometria", cor: "matematica", videos: [
+                {nome: "Geometria Plana - Área de figuras planas", url: "https://www.youtube.com/watch?v=kyiFRdDTGJg"},
+                {nome: "PERÍMETRO E ÁREA", url: "https://www.youtube.com/watch?v=b9CQcu3N-so"},
+                {nome: "PERÍMETRO - GEOMETRIA PLANA", url: "https://www.youtube.com/watch?v=OGgZcKILsEU"},
+                {nome: "ÁREAS", url: "https://www.youtube.com/watch?v=k3nn04tnInA"},
+                {nome: "ÁREA E PERÍMETRO - RESOLUÇÃO", url: "https://www.youtube.com/watch?v=P_oB6jR8LiQ"}
+            ]},
+            {sem: 6, bloco: "Matemática", topico: "Medidas", cor: "matematica", videos: [
+                {nome: "MEDIDAS DE COMPRIMENTO E CONVERSÃO", url: "https://www.youtube.com/watch?v=_VYHItAVlHg"},
+                {nome: "CONVERSÃO DE UNIDADES E MEDIDAS", url: "https://www.youtube.com/watch?v=QxNAJ2D4eJ8"},
+                {nome: "MEDIDAS DE COMPRIMENTO - CONVERSÃO #01", url: "https://www.youtube.com/watch?v=dHr5phd_qL8"},
+                {nome: "MEDIDAS DE COMPRIMENTO - FÁCIL e RÁPIDO", url: "https://www.youtube.com/watch?v=AEq9ykJkR2U"},
+                {nome: "MEDIDAS DE COMPRIMENTO - EXERCÍCIOS", url: "https://www.youtube.com/watch?v=HobKaKHvCtY"}
+            ]},
+            {sem: 7, bloco: "Matemática", topico: "Funções", cor: "matematica", videos: [
+                {nome: "Funções: Plano Cartesiano", url: "https://www.youtube.com/watch?v=iC4q1AGeN5A"},
+                {nome: "PLANO CARTESIANO", url: "https://www.youtube.com/watch?v=EAeTBeEHSD4"},
+                {nome: "GRÁFICO DA FUNÇÃO 1º GRAU", url: "https://www.youtube.com/watch?v=67RECOYU0nA"},
+                {nome: "PLANO CARTESIANO - PRODUTO", url: "https://www.youtube.com/watch?v=Vg8yTl0WvKc"},
+                {nome: "GRÁFICO FUNÇÃO - RÁPIDO", url: "https://www.youtube.com/watch?v=Wb0ceNgBM00"}
+            ]},
+            {sem: 8, bloco: "Matemática", topico: "Estatística", cor: "matematica", videos: [
+                {nome: "Análise de gráficos e tabelas", url: "https://www.youtube.com/watch?v=HT9vcpCV5PY"},
+                {nome: "Estatística: Média, Moda, Mediana COM GRÁFICO", url: "https://www.youtube.com/watch?v=MLw4KGoz9VE"},
+                {nome: "ESTATÍSTICA ENEM", url: "https://www.youtube.com/watch?v=X5BUC6Lc8gw"},
+                {nome: "MÉDIA, MEDIANA E MODA", url: "https://www.youtube.com/watch?v=uAtPI64xep4"},
+                {nome: "MEDIDAS DE TENDÊNCIA CENTRAL", url: "https://www.youtube.com/watch?v=GIzwKJL33_g"}
+            ]},
+            {sem: 9, bloco: "Matemática", topico: "Revisão e Simulado", cor: "matematica", videos: [
+                {nome: "Resolução de Problemas", url: "https://www.youtube.com/watch?v=RdBBd-UuG54"},
+                {nome: "Dicas para RESOLUÇÃO DE PROBLEMAS", url: "https://www.youtube.com/watch?v=EW27Qn-nmUs"},
+                {nome: "Estratégia de RESOLUÇÃO", url: "https://www.youtube.com/watch?v=sBr6T-WiNOE"},
+                {nome: "5 PASSOS PARA RESOLVER PROBLEMAS", url: "https://www.youtube.com/watch?v=-4AfOVhw8fM"},
+                {nome: "Como Interpretar e Resolver Qualquer Problema", url: "https://www.youtube.com/watch?v=hOPm_9RBBTU"}
+            ]},
+
+            // CIÊNCIAS NATURAIS (Semanas 10-18)
+            {sem: 10, bloco: "Ciências Naturais", topico: "Método Científico", cor: "cn", videos: [
+                {nome: "MÉTODO CIENTÍFICO - Aula completa", url: "https://www.youtube.com/watch?v=MxjGqqmddS0"},
+                {nome: "MÉTODO CIENTÍFICO - Ensino Fundamental", url: "https://www.youtube.com/watch?v=MU4EmLqIdDE"},
+                {nome: "O Método Científico - Questões", url: "https://www.youtube.com/watch?v=S1nNQRmplEo"},
+                {nome: "Método científico: passos", url: "https://www.youtube.com/watch?v=u0cR1w3sKHA"},
+                {nome: "MÉTODO CIENTÍFICO - Etapas", url: "https://www.youtube.com/watch?v=00jFpyboNWM"}
+            ]},
+            {sem: 11, bloco: "Ciências Naturais", topico: "Leis de Newton", cor: "cn", videos: [
+                {nome: "Leis de Newton força e movimento", url: "https://www.youtube.com/watch?v=9oUPHT9Zz44"},
+                {nome: "Leis de Newton: Conceito de força", url: "https://www.youtube.com/watch?v=lpe7mT2LSuY"},
+                {nome: "AS TRÊS LEIS DE NEWTON", url: "https://www.youtube.com/watch?v=UM_RzhJakEQ"},
+                {nome: "LEIS DE NEWTON - FÍSICA DO ZERO", url: "https://www.youtube.com/watch?v=iuPrkzJp20I"},
+                {nome: "As leis de Newton - Ensino Médio", url: "https://www.youtube.com/watch?v=O8Q2jzf002g"}
+            ]},
+            {sem: 12, bloco: "Ciências Naturais", topico: "Energia e Trabalho", cor: "cn", videos: [
+                {nome: "TRABALHO, POTÊNCIA E ENERGIA", url: "https://www.youtube.com/watch?v=rb6VPKWOcp0"},
+                {nome: "Energia Potencial Gravitacional", url: "https://www.youtube.com/watch?v=gvEwCimfwKc"},
+                {nome: "ENERGIA POTENCIAL E TRABALHO", url: "https://www.youtube.com/watch?v=SfYOPmkTICI"},
+                {nome: "ENERGIA POTENCIAL GRAVITACIONAL", url: "https://www.youtube.com/watch?v=976QadOKOEo"},
+                {nome: "ENERGIA CINÉTICA E POTENCIAL", url: "https://www.youtube.com/watch?v=CQFnmOIuxi8"}
+            ]},
+            {sem: 13, bloco: "Ciências Naturais", topico: "Tabela Periódica", cor: "cn", videos: [
+                {nome: "TABELA PERIÓDICA: organização", url: "https://www.youtube.com/watch?v=mfObV_CKrYo"},
+                {nome: "A Tabela Periódica dos Elementos", url: "https://www.youtube.com/watch?v=oUOcPWytESE"},
+                {nome: "Tabela periódica - classificação", url: "https://www.youtube.com/watch?v=mlq58sRaLKw"},
+                {nome: "Periodicidade dos elementos", url: "https://www.youtube.com/watch?v=_m1g8m_ozMg"},
+                {nome: "TABELA PERIÓDICA E DISTRIBUIÇÃO", url: "https://www.youtube.com/watch?v=6OI4cBNkGOU"}
+            ]},
+            {sem: 14, bloco: "Ciências Naturais", topico: "Reações Químicas", cor: "cn", videos: [
+                {nome: "Reações Ácido-Base", url: "https://www.youtube.com/watch?v=obowAuy3SUk"},
+                {nome: "Reações ácido base", url: "https://www.youtube.com/watch?v=IdpxrIYN9UM"},
+                {nome: "pH de soluções aquosas", url: "https://www.youtube.com/watch?v=EsXahRCqvX0"},
+                {nome: "Neutralização de ácidos e bases", url: "https://www.youtube.com/watch?v=z_TLTy_kiQA"},
+                {nome: "Reação de Ácido-Base", url: "https://www.youtube.com/watch?v=HbeijJh6A0E"}
+            ]},
+            {sem: 15, bloco: "Ciências Naturais", topico: "Célula e Divisão", cor: "cn", videos: [
+                {nome: "Divisão Celular - Mitose", url: "https://www.youtube.com/watch?v=vMadp5MiLbQ"},
+                {nome: "Mitose vs. Meiose", url: "https://www.youtube.com/watch?v=EkRs9kL5Kw4"},
+                {nome: "Mitose - Divisão Celular", url: "https://www.youtube.com/watch?v=kfofwQOMc0o"},
+                {nome: "Divisão celular: mitose", url: "https://www.youtube.com/watch?v=gAikprrKpK4"},
+                {nome: "MITOSE E MEIOSE - Diferenças", url: "https://www.youtube.com/watch?v=dDa_o2_A8QU"}
+            ]},
+            {sem: 16, bloco: "Ciências Naturais", topico: "Genética e DNA", cor: "cn", videos: [
+                {nome: "MENDEL: O SEGREDO da HERANÇA", url: "https://www.youtube.com/watch?v=KXE0-MhaieU"},
+                {nome: "Conceitos básicos da genética", url: "https://www.youtube.com/watch?v=IHsA7T3yWqE"},
+                {nome: "GENÉTICA: LEIS DE MENDEL, GENES, DNA E CROMOSSOMOS", url: "https://www.youtube.com/watch?v=-Vv3USW7iRU"},
+                {nome: "Primeira lei de Mendel e cruzamentos genéticos", url: "https://www.youtube.com/watch?v=jZH_S4b1elQ"},
+                {nome: "PRIMEIRA LEI DE MENDEL | GENÉTICA", url: "https://www.youtube.com/watch?v=o9XcjlufW2k"}
+            ]},
+            {sem: 17, bloco: "Ciências Naturais", topico: "Ecologia", cor: "cn", videos: [
+                {nome: "RELAÇÕES ECOLÓGICAS - Harmônicas e Desarmônicas", url: "https://www.youtube.com/watch?v=--axTRLZLsE"},
+                {nome: "Relações ecológicas, ecossistemas, biomas", url: "https://www.youtube.com/watch?v=xo01cGj8sOs"},
+                {nome: "Relações ecológicas - Biologia", url: "https://www.youtube.com/watch?v=Esuj70_CoEw"},
+                {nome: "ECOLOGIA - RELAÇÕES ECOLÓGICAS", url: "https://www.youtube.com/watch?v=ooZ_FCYGS8w"},
+                {nome: "ECOLOGIA: CADEIA ALIMENTAR, BIOMAS E RELAÇÕES", url: "https://www.youtube.com/watch?v=TsclSi3nNsI"}
+            ]},
+            {sem: 18, bloco: "Ciências Naturais", topico: "Revisão e Simulado", cor: "cn", videos: [
+                {nome: "CADEIAS ALIMENTARES | Resumo de Biologia", url: "https://www.youtube.com/watch?v=Kn0naS7PiUs"},
+                {nome: "Cadeias e Teias Alimentares", url: "https://www.youtube.com/watch?v=QPFeWfM_6fs"},
+                {nome: "Cadeia alimentar e teia alimentar", url: "https://www.youtube.com/watch?v=wmVhZQN8-m4"},
+                {nome: "CADEIA ALIMENTAR E TEIA ALIMENTAR - ECOLOGIA", url: "https://www.youtube.com/watch?v=QQAqN7qL8Yg"},
+                {nome: "Cadeias, Teias e Pirâmides Alimentares", url: "https://www.youtube.com/watch?v=MVS8OoYCCaE"}
+            ]},
+
+            // CIÊNCIAS HUMANAS (Semanas 19-27)
+            {sem: 19, bloco: "Ciências Humanas", topico: "Cultura e Identidade", cor: "ch", videos: [
+                {nome: "As HISTÓRIA do BRASIL em 4 minutos", url: "https://www.youtube.com/watch?v=QQtYVp--QXo"},
+                {nome: "Cultura e identidade brasileira", url: "https://www.youtube.com/watch?v=pQPC1mi6GTY"},
+                {nome: "Cultura brasileira e Identidade", url: "https://www.youtube.com/watch?v=0v583AWWlHw"},
+                {nome: "A IDENTIDADE NACIONAL BRASILEIRA", url: "https://www.youtube.com/watch?v=D5PnqEv5oj8"},
+                {nome: "A diversidade cultural brasileira", url: "https://www.youtube.com/watch?v=gsK1LxVK0r8"}
+            ]},
+            {sem: 20, bloco: "Ciências Humanas", topico: "Território e Geografia", cor: "ch", videos: [
+                {nome: "ESPAÇO GEOGRÁFICO BRASILEIRO", url: "https://www.youtube.com/watch?v=6AecFxxHPlo"},
+                {nome: "Espaço Geográfico - Brasil Escola", url: "https://www.youtube.com/watch?v=vonz6HrVhWc"},
+                {nome: "Território Brasileiro - Introdução", url: "https://www.youtube.com/watch?v=K11trYEdWFk"},
+                {nome: "Localização e extensão territorial do Brasil", url: "https://www.youtube.com/watch?v=5NKt3FKV12Y"},
+                {nome: "O Espaço geográfico brasileiro", url: "https://www.youtube.com/watch?v=hfnH_QItozQ"}
+            ]},
+            {sem: 21, bloco: "Ciências Humanas", topico: "Natureza e Ambiente", cor: "ch", videos: [
+                {nome: "A FORMAÇÃO DO ESPAÇO GEOGRÁFICO BRASILEIRO", url: "https://www.youtube.com/watch?v=BAVJCRbnAW0"},
+                {nome: "ORGANIZAÇÃO DO ESPAÇO GEOGRÁFICO BRASILEIRO", url: "https://www.youtube.com/watch?v=hFEv9iFEdBo"},
+                {nome: "Geografia - Formação do território brasileiro", url: "https://www.youtube.com/watch?v=UP9WLxsOCYs"},
+                {nome: "Espaço Geográfico - Geobrasil", url: "https://www.youtube.com/watch?v=tzIMkUE0XiQ"},
+                {nome: "Conceitos de espaço geográfico, região, lugar", url: "https://www.youtube.com/watch?v=ExJO6rncnwg"}
+            ]},
+            {sem: 22, bloco: "Ciências Humanas", topico: "Estado e Política", cor: "ch", videos: [
+                {nome: "Filosofia - Noções de direitos humanos e cidadania", url: "https://www.youtube.com/watch?v=p_yfxFs8j54"},
+                {nome: "Geografia - Noções de direitos humanos", url: "https://www.youtube.com/watch?v=hC3BY39IXmg"},
+                {nome: "Democracia Cidadania e Direitos Humanos", url: "https://www.youtube.com/watch?v=8vrXZHnl5mA"},
+                {nome: "História - Noções de direitos humanos e cidadania", url: "https://www.youtube.com/watch?v=eieKl-yRKz4"},
+                {nome: "Sociologia - Cidadania e Direitos Humanos", url: "https://www.youtube.com/watch?v=sH6Pvowg1U8"}
+            ]},
+            {sem: 23, bloco: "Ciências Humanas", topico: "Direito e Cidadania", cor: "ch", videos: [
+                {nome: "Democracia, Cidadania e Direitos Humanos | Revisão Enem", url: "https://www.youtube.com/watch?v=8M3NHRaXsX0"},
+                {nome: "Democracia e Cidadania: direitos civis, políticos e sociais", url: "https://www.youtube.com/watch?v=yMJUWb--YdQ"},
+                {nome: "CIDADANIA E DIREITOS HUMANOS", url: "https://www.youtube.com/watch?v=Qr8SkeplBqg"},
+                {nome: "EDUCAÇÃO / DIREITOS HUMANOS", url: "https://www.youtube.com/watch?v=v5WrPevUVe8"},
+                {nome: "Democracia, Cidadania e Direitos", url: "https://www.youtube.com/watch?v=8M3NHRaXsX0"}
+            ]},
+            {sem: 24, bloco: "Ciências Humanas", topico: "História do Brasil", cor: "ch", videos: [
+                {nome: "Aula de História: Colonização Portuguesa no Brasil", url: "https://www.youtube.com/watch?v=D38xy_Syfsg"},
+                {nome: "Colonização - Histórias do Brasil", url: "https://www.youtube.com/watch?v=zpNr6KKH8d8"},
+                {nome: "Início da colonização do Brasil", url: "https://www.youtube.com/watch?v=U8j4-zYk4q8"},
+                {nome: "COLONIZAÇÃO DO BRASIL A PARTIR DE 1530", url: "https://www.youtube.com/watch?v=ONd1RtatThs"},
+                {nome: "História do Brasil | Documentário Histórico", url: "https://www.youtube.com/watch?v=EqTFNgdWAJk"}
+            ]},
+            {sem: 25, bloco: "Ciências Humanas", topico: "Urbanização e Industrialização", cor: "ch", videos: [
+                {nome: "Industrialização brasileira", url: "https://www.youtube.com/watch?v=B9lXVVA2vgE"},
+                {nome: "Urbanização e Industrialização DO BRASIL", url: "https://www.youtube.com/watch?v=EpIsGZF653k"},
+                {nome: "Industrialização e urbanização no Brasil", url: "https://www.youtube.com/watch?v=jmvF92RDk-I"},
+                {nome: "Urbanização brasileira", url: "https://www.youtube.com/watch?v=Gt3hkSupWKM"},
+                {nome: "INDUSTRIALIZAÇÃO E URBANIZAÇÃO", url: "https://www.youtube.com/watch?v=j_VHs4Re2mk"}
+            ]},
+            {sem: 26, bloco: "Ciências Humanas", topico: "Trabalho e Tecnologia", cor: "ch", videos: [
+                {nome: "A Globalização e sua relação com a tecnologia e economia", url: "https://www.youtube.com/watch?v=ShdyrWt2d8s"},
+                {nome: "SOS ProENEM - Globalização, economia e trabalho", url: "https://www.youtube.com/watch?v=9GhJDURV-HY"},
+                {nome: "O Trabalho no contexto da Globalização", url: "https://www.youtube.com/watch?v=kv_vh7C2Ycc"},
+                {nome: "O Trabalho na era da Globalização", url: "https://www.youtube.com/watch?v=WLnBPIQsQOs"},
+                {nome: "Globalização", url: "https://www.youtube.com/watch?v=h5WjNMGztvE"}
+            ]},
+            {sem: 27, bloco: "Ciências Humanas", topico: "Revisão e Simulado", cor: "ch", videos: [
+                {nome: "GEOGRAFIA - A Globalização no Mercado de Trabalho", url: "https://www.youtube.com/watch?v=ewhOlFEhpd4"},
+                {nome: "A Globalização e as tecnologias do cotidiano", url: "https://www.youtube.com/watch?v=yOCRBrUZuu4"},
+                {nome: "GEOGRAFIA - Tecnologia na Globalização", url: "https://www.youtube.com/watch?v=F_tYBCko31k"},
+                {nome: "GLOBALIZAÇÃO, TECNOLOGIA DA INFORMAÇÃO", url: "https://www.youtube.com/watch?v=1fks4uwZGGM"},
+                {nome: "A Globalização - Geografia", url: "https://www.youtube.com/watch?v=Q_1e23EcGE4"}
+            ]},
+
+            // LINGUAGENS (Semanas 28-36)
+            {sem: 28, bloco: "Linguagens", topico: "Português - Gramática Básica", cor: "lg", videos: [
+                {nome: "Aulas de Português - Fonologia e Fonética", url: "https://www.youtube.com/watch?v=nxr4DAX85c4"},
+                {nome: "Classes de Palavras - Substantivo, Adjetivo, Artigo", url: "https://www.youtube.com/watch?v=H0GrpUPNbdE"},
+                {nome: "Português - Estrutura da Oração", url: "https://www.youtube.com/watch?v=PNzhjDxaL0s"},
+                {nome: "Morfologia: Tempos e Modos Verbais", url: "https://www.youtube.com/watch?v=_u2KLx8S9eQ"},
+                {nome: "Acentuação Gráfica - Regras Práticas", url: "https://www.youtube.com/watch?v=lq7VmPaQJhA"}
+            ]},
+            {sem: 29, bloco: "Linguagens", topico: "Gramática Avançada", cor: "lg", videos: [
+                {nome: "Sintaxe - Período Composto", url: "https://www.youtube.com/watch?v=uv0x0yKEGKg"},
+                {nome: "Coordenação e Subordinação", url: "https://www.youtube.com/watch?v=47-bV2Nqtg0"},
+                {nome: "Vírgula e Pontuação", url: "https://www.youtube.com/watch?v=mArXG3Wapgk"},
+                {nome: "Regência e Concordância", url: "https://www.youtube.com/watch?v=cNXvqW_Hc5o"},
+                {nome: "Figuras de Linguagem", url: "https://www.youtube.com/watch?v=cDPH0F6YFZA"}
+            ]},
+            {sem: 30, bloco: "Linguagens", topico: "Literatura Brasileira", cor: "lg", videos: [
+                {nome: "Literatura Brasileira - Barroco ao Romantismo", url: "https://www.youtube.com/watch?v=R-BUIkX6zXM"},
+                {nome: "Literatura - Realismo e Naturalismo", url: "https://www.youtube.com/watch?v=CZ3zy5U85wY"},
+                {nome: "Symbolismo e Pré-modernismo", url: "https://www.youtube.com/watch?v=d4-0BrpqNbM"},
+                {nome: "Modernismo Brasileiro - Semana de Arte Moderna", url: "https://www.youtube.com/watch?v=EQF7KfTIWQA"},
+                {nome: "Literatura Contemporânea", url: "https://www.youtube.com/watch?v=5Ty4KeEWw_s"}
+            ]},
+            {sem: 31, bloco: "Linguagens", topico: "Inglês - Grammar", cor: "lg", videos: [
+                {nome: "English Essentials - Present Tenses", url: "https://www.youtube.com/watch?v=0V8mCKjb8L0"},
+                {nome: "Past Tenses in English", url: "https://www.youtube.com/watch?v=TS8vAQaKPAg"},
+                {nome: "Future and Modal Verbs", url: "https://www.youtube.com/watch?v=9lMfPvdRsWs"},
+                {nome: "Phrasal Verbs - Learn English", url: "https://www.youtube.com/watch?v=wVx0Xw_qz2w"},
+                {nome: "Conditional Sentences - English Grammar", url: "https://www.youtube.com/watch?v=JYqg-_yl4X8"}
+            ]},
+            {sem: 32, bloco: "Linguagens", topico: "Redação e Texto", cor: "lg", videos: [
+                {nome: "Como Escrever uma Boa Redação", url: "https://www.youtube.com/watch?v=jVrJqzGqAUE"},
+                {nome: "Estrutura do Texto Dissertativo", url: "https://www.youtube.com/watch?v=m7T2lQH1fKA"},
+                {nome: "Coesão e Coerência Textual", url: "https://www.youtube.com/watch?v=f-JQiK_Xd1E"},
+                {nome: "Argumentação em Textos", url: "https://www.youtube.com/watch?v=5FQSJJJmvME"},
+                {nome: "Tipos de Texto e Gêneros", url: "https://www.youtube.com/watch?v=URXfPE7wKu4"}
+            ]},
+            {sem: 33, bloco: "Linguagens", topico: "Revisão - Português", cor: "lg", videos: [
+                {nome: "Revisão de Português - Tudo em 20 min", url: "https://www.youtube.com/watch?v=gJ6MzLkpjJI"},
+                {nome: "Dúvidas Comuns de Português", url: "https://www.youtube.com/watch?v=qN_mVWQhGj4"},
+                {nome: "Exercícios de Português - ENEM", url: "https://www.youtube.com/watch?v=fk-H7EIkuZU"},
+                {nome: "Interpretação de Textos - Técnica Rápida", url: "https://www.youtube.com/watch?v=8L2-Sz4URJI"},
+                {nome: "Português - Erros Mais Comuns", url: "https://www.youtube.com/watch?v=zTVxL3YL2YA"}
+            ]},
+            {sem: 34, bloco: "Linguagens", topico: "Revisão - Inglês", cor: "lg", videos: [
+                {nome: "English Grammar Essentials Review", url: "https://www.youtube.com/watch?v=HWs3-iWwZSs"},
+                {nome: "Common English Mistakes - Aprenda Rápido", url: "https://www.youtube.com/watch?v=GHdx6fSc8WA"},
+                {nome: "Vocabulário Essencial para ENEM", url: "https://www.youtube.com/watch?v=x7Q5LXCQ5Ec"},
+                {nome: "Reading Comprehension - ENEM Style", url: "https://www.youtube.com/watch?v=G4mPQ2K2S3o"},
+                {nome: "English Listening - Practice Now", url: "https://www.youtube.com/watch?v=nEBYMdm4FHw"}
+            ]},
+            {sem: 35, bloco: "Linguagens", topico: "Revisão - Literatura", cor: "lg", videos: [
+                {nome: "Português - Questões ENEM Resolvidas", url: "https://www.youtube.com/watch?v=e2Jj5aCkN4o"},
+                {nome: "Inglês - Questões ENEM Explicadas", url: "https://www.youtube.com/watch?v=rCWVVqLHOzY"},
+                {nome: "Redação - Estrutura Perfeita para Nota 1000", url: "https://www.youtube.com/watch?v=rjkkLCZ3Fy8"},
+                {nome: "Literatura - Temas que Mais Caem no ENEM", url: "https://www.youtube.com/watch?v=TyoGLbqIKUg"},
+                {nome: "Simulado Completo - Linguagens", url: "https://www.youtube.com/watch?v=XKvHX5rGKnk"}
+            ]},
+            {sem: 36, bloco: "Linguagens", topico: "Preparação Final", cor: "lg", videos: [
+                {nome: "Estratégia para o ENEM - Tempo e Priorização", url: "https://www.youtube.com/watch?v=VQOoKJGgUqE"},
+                {nome: "Dicas Psicológicas para o Dia da Prova", url: "https://www.youtube.com/watch?v=CyYMN2x5qEU"},
+                {nome: "Revisão Rápida - Todas as Disciplinas", url: "https://www.youtube.com/watch?v=6qBg4CbAUsQ"},
+                {nome: "Como Revisar 1 Dia Antes da Prova", url: "https://www.youtube.com/watch?v=5qc0SkKvU4Q"},
+                {nome: "Simulado Final 72 Questões - ENEM Completo", url: "https://www.youtube.com/watch?v=3PKw-3QrpOU"}
+            ]}
+        ];
+
+        // ===== VARIÁVEIS GLOBAIS =====
+        let totalVideos = 0;
+        let videosMarcados = 0;
+
+        // ===== FUNÇÕES =====
+        function abrirAba(aba) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${aba}`).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            content.classList.toggle('active');
+        }
+
+        function atualizarProgresso() {
+            const checkboxes = document.querySelectorAll('.video-checkbox');
+            videosMarcados = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const percentual = Math.round((videosMarcados / totalVideos) * 100);
+            document.getElementById('progressFill').style.width = percentual + '%';
+            document.getElementById('progressText').textContent = `${videosMarcados}/${totalVideos} vídeos`;
+        }
+
+        function gerarSemanas() {
+            const container = document.getElementById('semanas-container');
+            totalVideos = plano.reduce((sum, s) => sum + s.videos.length, 0);
+            
+            plano.forEach((s) => {
+                const contentId = `content-${s.sem}`;
+                
+                let html = `
+                    <div class="semana-card">
+                        <div class="semana-header ${s.cor}" onclick="toggleContent('${contentId}')">
+                            <div>
+                                <h2>Semana ${s.sem} - ${s.topico}</h2>
+                                <p>${s.bloco}</p>
+                            </div>
+                            <span class="badge ${s.cor}">${s.videos.length} vídeos</span>
+                        </div>
+
+                        <div class="semana-content" id="${contentId}">
+                            <div class="etapa">
+                                <div class="etapa-titulo">🎬 ${s.videos.length} Vídeos Aula</div>
+                `;
+
+                s.videos.forEach((v, i) => {
+                    html += `
+                        <div class="video-item">
+                            <input type="checkbox" class="video-checkbox" onchange="atualizarProgresso()">
+                            <div class="video-content">
+                                <div class="video-nome">${v.nome}</div>
+                                <a href="${v.url}" target="_blank" class="video-link">▶️ Assistir</a>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML += html;
+            });
+
+            atualizarProgresso();
+        }
+
+        function abrirSimulado(tipo) {
+            window.open('simulado_encceja_completo.html', '_blank');
+        }
+
+        // ===== INICIALIZAR =====
+        gerarSemanas();
+    </script>
+</body>
+</html>
