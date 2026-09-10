@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENCCEJA 2027 - Plano + Simulados</title>
+    <title>ENCCEJA 2027 - Plano + Simulados + 135 Vídeos YouTube</title>
     <style>
         * {
             margin: 0;
@@ -118,6 +118,8 @@
         .tab-content {
             padding: 30px 40px;
             display: none;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
         }
 
         .tab-content.active {
@@ -130,7 +132,156 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* CARDS SIMULADOS (ABA 2) */
+        /* CARDS SEMANAS */
+        .semana-card {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .semana-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .semana-header {
+            padding: 20px;
+            border-left: 5px solid;
+            background: #fafafa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .semana-header h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .semana-header p {
+            font-size: 13px;
+            color: #999;
+            margin: 0;
+        }
+
+        .checkbox-semana {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .semana-header.matematica { border-left-color: #4ECDC4; }
+        .semana-header.cn { border-left-color: #9B59B6; }
+        .semana-header.ch { border-left-color: #45B7D1; }
+        .semana-header.lg { border-left-color: #FF6B6B; }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge.matematica { background: #4ECDC4; }
+        .badge.cn { background: #9B59B6; }
+        .badge.ch { background: #45B7D1; }
+        .badge.lg { background: #FF6B6B; }
+
+        .semana-content {
+            padding: 25px;
+            display: none;
+        }
+
+        .semana-content.active {
+            display: block;
+        }
+
+        .etapa {
+            margin-bottom: 25px;
+        }
+
+        .etapa-titulo {
+            font-size: 14px;
+            font-weight: 600;
+            color: #667eea;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .video-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .video-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: #667eea;
+            flex-shrink: 0;
+        }
+
+        .video-content {
+            flex-grow: 1;
+        }
+
+        .video-nome {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .video-link {
+            display: inline-block;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: transform 0.2s;
+            margin-right: 10px;
+        }
+
+        .video-link:hover {
+            transform: scale(1.05);
+        }
+
+        .pdf-link {
+            display: inline-block;
+            color: white;
+            background: #FF6B6B;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .pdf-link:hover {
+            transform: scale(1.05);
+        }
+
+        /* SIMULADOS */
         .simulados-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -197,485 +348,17 @@
             opacity: 0.9;
         }
 
-        /* CARDS SEMANAS (ABA 1) */
-        .semana-card {
-            background: white;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .semana-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        }
-
-        .semana-header {
-            padding: 20px;
-            border-left: 5px solid;
-            background: #fafafa;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .semana-header h2 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        .semana-header p {
-            font-size: 13px;
-            color: #999;
-            margin: 0;
-        }
-
-        .checkbox-semana {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
-
-        .semana-header.matematica { border-left-color: #4ECDC4; }
-        .semana-header.cn { border-left-color: #9B59B6; }
-        .semana-header.ch { border-left-color: #45B7D1; }
-        .semana-header.lg { border-left-color: #FF6B6B; }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: white;
-            margin-left: 10px;
-        }
-
-        .badge.matematica { background: #4ECDC4; }
-        .badge.cn { background: #9B59B6; }
-        .badge.ch { background: #45B7D1; }
-        .badge.lg { background: #FF6B6B; }
-
-        .semana-content {
-            padding: 25px;
-            display: none;
-        }
-
-        .semana-content.active {
-            display: block;
-        }
-
-        .etapa {
-            margin-bottom: 25px;
-        }
-
-        .etapa-titulo {
-            font-size: 14px;
-            font-weight: 600;
-            color: #667eea;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .etapa-conteudo {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            line-height: 1.6;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .aula-link {
-            display: inline-block;
-            margin: 10px 0;
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .quiz-container {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border: 1px solid #bae6fd;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .quiz-pergunta {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #bae6fd;
-        }
-
-        .quiz-pergunta:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .quiz-texto {
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .quiz-opcoes {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .quiz-opcao {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            background: white;
-            border: 1px solid #ddd;
-            transition: all 0.2s;
-            font-size: 12px;
-        }
-
-        .quiz-opcao:hover {
-            background: #f0f0f0;
-            border-color: #667eea;
-        }
-
-        .quiz-opcao.correta {
-            background: #dcfce7;
-            border-color: #22c55e;
-            color: #166534;
-        }
-
-        .quiz-opcao.incorreta {
-            background: #fee2e2;
-            border-color: #ef4444;
-            color: #991b1b;
-        }
-
-        .quiz-resultado {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .quiz-resultado.correto {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .quiz-resultado.incorreto {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        /* MODAL SIMULADO */
-        .simulado-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-
-        .simulado-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .simulado-modal-content {
-            background: white;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 900px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
-        }
-
-        .simulado-modal-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 15px 15px 0 0;
-        }
-
-        .simulado-modal-titulo {
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .cronometro {
-            font-size: 18px;
-            font-weight: 600;
-            background: rgba(255,255,255,0.2);
-            padding: 8px 16px;
-            border-radius: 8px;
-            min-width: 100px;
-            text-align: center;
-        }
-
-        .botoes-simulado-modal {
-            display: flex;
-            gap: 10px;
-            margin-left: auto;
-        }
-
-        .btn-fechar, .btn-pausar, .btn-finalizar {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.2s;
-        }
-
-        .btn-fechar {
-            background: rgba(255,255,255,0.2);
-            color: white;
-        }
-
-        .btn-fechar:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .btn-pausar {
-            background: #FFA500;
-            color: white;
-        }
-
-        .btn-pausar:hover {
-            background: #ff8c00;
-        }
-
-        .btn-finalizar {
-            background: #FF6B6B;
-            color: white;
-        }
-
-        .btn-finalizar:hover {
-            background: #e74c3c;
-        }
-
-        .simulado-modal-body {
-            padding: 30px;
-        }
-
-        .questao-progresso {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .questao-numero {
-            font-size: 14px;
-            color: #666;
-            font-weight: 600;
-        }
-
-        .progress-bar-quest {
-            width: 100%;
-            height: 4px;
-            background: #e0e0e0;
-            border-radius: 2px;
-            margin: 0 20px;
-            overflow: hidden;
-        }
-
-        .progress-fill-quest {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .enunciado {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .alternativas {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .alternativa {
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 14px;
-        }
-
-        .alternativa:hover {
-            border-color: #667eea;
-            background: #f0f9ff;
-        }
-
-        .alternativa.selecionada {
-            background: #dbeafe;
-            border-color: #667eea;
-            font-weight: 500;
-            color: #1e40af;
-        }
-
-        .alternativa.correta {
-            background: #dcfce7;
-            border-color: #22c55e;
-            color: #166534;
-            font-weight: 600;
-        }
-
-        .alternativa.incorreta {
-            background: #fee2e2;
-            border-color: #ef4444;
-            color: #991b1b;
-            font-weight: 600;
-        }
-
-        .botoes-questao {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-            justify-content: space-between;
-        }
-
-        .btn-quest {
-            padding: 10px 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background: white;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .btn-quest:hover:not(:disabled) {
-            background: #f0f0f0;
-            border-color: #667eea;
-        }
-
-        .btn-quest:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .btn-proxima {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: transparent;
-            flex: 1;
-        }
-
-        .resultado-final {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .score {
-            font-size: 64px;
-            font-weight: bold;
-            color: #667eea;
-            margin: 20px 0;
-        }
-
-        .mensagem-resultado {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .btn-reiniciar, .btn-voltar-simulados {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            margin: 0 10px;
-            transition: all 0.2s;
-        }
-
-        .btn-reiniciar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-reiniciar:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-voltar-simulados {
-            background: #ddd;
-            color: #333;
-        }
-
-        .btn-voltar-simulados:hover {
-            background: #ccc;
-        }
-
         @media (max-width: 768px) {
-            .header {
-                position: static;
-                margin-bottom: 20px;
-            }
-
             .header-top {
                 flex-direction: column;
-                gap: 15px;
+                gap: 20px;
             }
-
-            .header-top h1 {
-                font-size: 24px;
-            }
-
-            .semana-header {
+            .tabs-header {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
             }
-
-            .simulados-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .simulado-card.final {
-                grid-column: auto;
-            }
-
             .tab-btn {
-                font-size: 13px;
-                padding: 15px 10px;
+                padding: 15px;
+                font-size: 14px;
             }
         }
     </style>
@@ -686,10 +369,12 @@
         <div class="header">
             <div class="header-top">
                 <h1>📚 ENCCEJA 2027</h1>
-                <div style="font-size: 28px;">✓</div>
+                <div style="text-align: right;">
+                    <p style="margin: 0; color: #999; font-size: 14px;">Plataforma Completa com 135 Vídeos</p>
+                </div>
             </div>
             <div class="progress-section">
-                <div class="progress-label">Progresso das Semanas: <span id="progresso-percent">0%</span></div>
+                <div class="progress-label">📊 Progresso Geral: <strong id="progressText">0/135 vídeos</strong></div>
                 <div class="progress-bar">
                     <div id="progressFill"></div>
                 </div>
@@ -699,283 +384,275 @@
         <!-- ABAS -->
         <div class="tabs-container">
             <div class="tabs-header">
-                <button class="tab-btn active" onclick="abrirAba('plano')">📚 Plano de Estudos (36 Semanas)</button>
-                <button class="tab-btn" onclick="abrirAba('simulados')">🎯 Simulados</button>
+                <button class="tab-btn active" onclick="abrirAba('plano')">📖 Plano de Estudos (36 semanas)</button>
+                <button class="tab-btn" onclick="abrirAba('simulados')">🧪 Simulados</button>
             </div>
 
-            <!-- ABA 1: PLANO DE ESTUDOS -->
-            <div class="tab-content active" id="tab-plano">
+            <!-- ABA 1: PLANO -->
+            <div id="tab-plano" class="tab-content active">
                 <div id="semanas-container"></div>
             </div>
 
             <!-- ABA 2: SIMULADOS -->
-            <div class="tab-content" id="tab-simulados">
-                <div class="simulados-grid" id="simulados-grid"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL SIMULADO -->
-    <div class="simulado-modal" id="simulado-modal">
-        <div class="simulado-modal-content">
-            <div class="simulado-modal-header">
-                <div class="simulado-modal-titulo" id="simulado-titulo">Simulado</div>
-                <div class="cronometro" id="cronometro">00:00</div>
-                <div class="botoes-simulado-modal">
-                    <button class="btn-pausar" id="btn-pausar" onclick="pausarSimulado()">⏸ Pausar</button>
-                    <button class="btn-finalizar" onclick="finalizarSimulado()">✓ Finalizar</button>
-                    <button class="btn-fechar" onclick="fecharSimulado()">✕ Fechar</button>
+            <div id="tab-simulados" class="tab-content">
+                <div class="simulados-grid">
+                    <div class="simulado-card mt" onclick="abrirSimulado('MT')">
+                        <div class="simulado-icon">📐</div>
+                        <div class="simulado-titulo">Simulado Matemática</div>
+                        <div class="simulado-info">20 questões • 60 min</div>
+                    </div>
+                    <div class="simulado-card cn" onclick="abrirSimulado('CN')">
+                        <div class="simulado-icon">🧪</div>
+                        <div class="simulado-titulo">Simulado Ciências Naturais</div>
+                        <div class="simulado-info">20 questões • 60 min</div>
+                    </div>
+                    <div class="simulado-card ch" onclick="abrirSimulado('CH')">
+                        <div class="simulado-icon">📖</div>
+                        <div class="simulado-titulo">Simulado Ciências Humanas</div>
+                        <div class="simulado-info">20 questões • 60 min</div>
+                    </div>
+                    <div class="simulado-card lg" onclick="abrirSimulado('LG')">
+                        <div class="simulado-icon">✏️</div>
+                        <div class="simulado-titulo">Simulado Linguagens</div>
+                        <div class="simulado-info">18 questões • 60 min</div>
+                    </div>
+                    <div class="simulado-card final" onclick="abrirSimulado('FINAL')">
+                        <div class="simulado-icon">⭐</div>
+                        <div class="simulado-titulo">Simulado Final Completo</div>
+                        <div class="simulado-info">72 questões • 120 min</div>
+                    </div>
                 </div>
-            </div>
-            <div class="simulado-modal-body">
-                <div class="questao-progresso">
-                    <div class="questao-numero">Questão <strong id="quest-atual">1</strong> de <strong id="quest-total">18</strong></div>
-                </div>
-                <div id="conteudo-quest"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // ===== DADOS DOS SIMULADOS =====
-        const questoesMat = [
-            {numero: 1, enunciado: "Um vendedor oferece: 'Compre 3 e pague 2'. Se cada produto custa R$ 50, quanto pagará ao comprar 6?", alternativas: {A: "R$ 150", B: "R$ 200", C: "R$ 250", D: "R$ 300", E: "R$ 350"}, gabarito: "B"},
-            {numero: 2, enunciado: "Uma receita pede 2/3 de xícara de açúcar. Fazendo o dobro, quanto de açúcar?", alternativas: {A: "1/3", B: "1", C: "1 1/3", D: "2", E: "2 2/3"}, gabarito: "C"},
-            {numero: 3, enunciado: "Um carro percorre 100 km em 2 horas. Qual é a velocidade média?", alternativas: {A: "40 km/h", B: "50 km/h", C: "60 km/h", D: "80 km/h", E: "100 km/h"}, gabarito: "B"},
-            {numero: 4, enunciado: "Se x + 5 = 12, qual é o valor de x?", alternativas: {A: "5", B: "6", C: "7", D: "8", E: "9"}, gabarito: "C"},
-            {numero: 5, enunciado: "Qual é o resultado de 2³ × 3²?", alternativas: {A: "36", B: "48", C: "64", D: "72", E: "96"}, gabarito: "D"},
-            {numero: 6, enunciado: "Uma pessoa tem R$ 1000 e gasta 30%. Quanto sobra?", alternativas: {A: "R$ 300", B: "R$ 500", C: "R$ 700", D: "R$ 800", E: "R$ 900"}, gabarito: "C"},
-            {numero: 7, enunciado: "Se um produto custa R$ 200 e tem desconto de 25%, qual é o preço final?", alternativas: {A: "R$ 25", B: "R$ 50", C: "R$ 150", D: "R$ 175", E: "R$ 180"}, gabarito: "C"},
-            {numero: 8, enunciado: "A área de um quadrado com lado 5 cm é:", alternativas: {A: "5 cm²", B: "10 cm²", C: "15 cm²", D: "20 cm²", E: "25 cm²"}, gabarito: "E"},
-            {numero: 9, enunciado: "Qual é a média aritmética de 10, 20 e 30?", alternativas: {A: "10", B: "15", C: "20", D: "25", E: "30"}, gabarito: "C"},
-            {numero: 10, enunciado: "Se y = 2x + 1, qual é o valor de y quando x = 3?", alternativas: {A: "5", B: "6", C: "7", D: "8", E: "9"}, gabarito: "C"},
-            {numero: 11, enunciado: "Um triângulo tem ângulos de 60° e 70°. Qual é o terceiro ângulo?", alternativas: {A: "30°", B: "40°", C: "50°", D: "60°", E: "90°"}, gabarito: "C"},
-            {numero: 12, enunciado: "Qual é o dobro de 3/4?", alternativas: {A: "1/2", B: "3/4", C: "1", D: "1 1/2", E: "3/2"}, gabarito: "E"},
-            {numero: 13, enunciado: "Se 5 canetas custam R$ 10, quanto custará 12 canetas?", alternativas: {A: "R$ 12", B: "R$ 15", C: "R$ 20", D: "R$ 24", E: "R$ 30"}, gabarito: "D"},
-            {numero: 14, enunciado: "Qual é a raiz quadrada de 144?", alternativas: {A: "10", B: "11", C: "12", D: "13", E: "14"}, gabarito: "C"},
-            {numero: 15, enunciado: "Um número aumenta 20%. Se era 50, qual é o novo valor?", alternativas: {A: "55", B: "60", C: "65", D: "70", E: "75"}, gabarito: "B"},
-            {numero: 16, enunciado: "Qual é o perímetro de um retângulo com comprimento 8 cm e largura 4 cm?", alternativas: {A: "12 cm", B: "24 cm", C: "32 cm", D: "48 cm", E: "64 cm"}, gabarito: "B"},
-            {numero: 17, enunciado: "Se 3x = 15, qual é o valor de x?", alternativas: {A: "3", B: "5", C: "7", D: "9", E: "12"}, gabarito: "B"},
-            {numero: 18, enunciado: "Qual é o resultado de (2 + 3)² ?", alternativas: {A: "10", B: "15", C: "20", D: "25", E: "30"}, gabarito: "D"}
-        ];
+        // ===== PLANO COM 135 VÍDEOS =====
+        const plano = [
+            // MATEMÁTICA (Semanas 1-9)
+            {sem: 1, bloco: "Matemática", topico: "História da Matemática", cor: "matematica", pdf: "Pág. 1-27", videos: [
+                {nome: "5 minutos que vão te surpreender! A História da Matemática", url: "https://www.youtube.com/watch?v=33UIRFqPTVg"},
+                {nome: "A História da Matemática - O Início", url: "https://www.youtube.com/watch?v=xxM_acVc5-0"},
+                {nome: "História dos Números", url: "https://www.youtube.com/watch?v=lOQtxvgto-Y"},
+                {nome: "A História da Matemática (Festival Video)", url: "https://www.youtube.com/watch?v=K9g7Vhe_5QU"},
+                {nome: "Números: Da História ao Hoje", url: "https://www.youtube.com/watch?v=FI2hFNGuTBU"}
+            ]},
+            {sem: 2, bloco: "Matemática", topico: "Lógica e Argumentação", cor: "matematica", pdf: "Pág. 28-54", videos: [
+                {nome: "LÓGICA PROPOSICIONAL: Revisão de Língua Portuguesa", url: "https://www.youtube.com/watch?v=KKnkTDaCL8c"},
+                {nome: "Lógica Matemática - Proposições e operações", url: "https://www.youtube.com/watch?v=pU4I8sC-2WM"},
+                {nome: "Proposição Lógica - Introdução", url: "https://www.youtube.com/watch?v=pdoX4erNMP8"},
+                {nome: "RACIOCÍNIO LÓGICO - PROPOSIÇÕES E TABELA VERDADE", url: "https://www.youtube.com/watch?v=KXm8Hi-I_G0"},
+                {nome: "Proposições Lógicas - Questões", url: "https://www.youtube.com/watch?v=ryxofLmdqeI"}
+            ]},
+            {sem: 3, bloco: "Matemática", topico: "Números Naturais", cor: "matematica", pdf: "Pág. 55-81", videos: [
+                {nome: "O que são números naturais?", url: "https://www.youtube.com/watch?v=1T8j0CTPYps"},
+                {nome: "Operações com números naturais", url: "https://www.youtube.com/watch?v=hC2YY0Zs-Cs"},
+                {nome: "Operações com números naturais - Exercícios", url: "https://www.youtube.com/watch?v=L93k3ecM1z4"},
+                {nome: "Expressões Numéricas", url: "https://www.youtube.com/watch?v=tzlGeqmCVUo"},
+                {nome: "NÚMEROS NATURAIS - EXERCÍCIOS", url: "https://www.youtube.com/watch?v=U6x0cfKj06s"}
+            ]},
+            {sem: 4, bloco: "Matemática", topico: "Frações e Decimais", cor: "matematica", pdf: "Pág. 82-108", videos: [
+                {nome: "COMO TRANSFORMAR FRAÇÃO EM NÚMERO DECIMAL", url: "https://www.youtube.com/watch?v=excWklaEb_E"},
+                {nome: "Como converter números decimais em fração", url: "https://www.youtube.com/watch?v=OP42bos1qSQ"},
+                {nome: "Transformar fração em decimal", url: "https://www.youtube.com/watch?v=TIjEtWND1Qw"},
+                {nome: "TRANSFORMAR NÚMERO DECIMAL EM FRAÇÃO", url: "https://www.youtube.com/watch?v=emMGMdlVUOo"},
+                {nome: "MÉTODO PRÁTICO", url: "https://www.youtube.com/watch?v=aJWyWbNhgvg"}
+            ]},
+            {sem: 5, bloco: "Matemática", topico: "Geometria", cor: "matematica", pdf: "Pág. 109-135", videos: [
+                {nome: "Geometria Plana - Área de figuras planas", url: "https://www.youtube.com/watch?v=kyiFRdDTGJg"},
+                {nome: "PERÍMETRO E ÁREA", url: "https://www.youtube.com/watch?v=b9CQcu3N-so"},
+                {nome: "PERÍMETRO - GEOMETRIA PLANA", url: "https://www.youtube.com/watch?v=OGgZcKILsEU"},
+                {nome: "ÁREAS", url: "https://www.youtube.com/watch?v=k3nn04tnInA"},
+                {nome: "ÁREA E PERÍMETRO - RESOLUÇÃO", url: "https://www.youtube.com/watch?v=P_oB6jR8LiQ"}
+            ]},
+            {sem: 6, bloco: "Matemática", topico: "Medidas", cor: "matematica", pdf: "Pág. 136-162", videos: [
+                {nome: "MEDIDAS DE COMPRIMENTO E CONVERSÃO", url: "https://www.youtube.com/watch?v=_VYHItAVlHg"},
+                {nome: "CONVERSÃO DE UNIDADES E MEDIDAS", url: "https://www.youtube.com/watch?v=QxNAJ2D4eJ8"},
+                {nome: "MEDIDAS DE COMPRIMENTO - CONVERSÃO #01", url: "https://www.youtube.com/watch?v=dHr5phd_qL8"},
+                {nome: "MEDIDAS DE COMPRIMENTO - FÁCIL e RÁPIDO", url: "https://www.youtube.com/watch?v=AEq9ykJkR2U"},
+                {nome: "MEDIDAS DE COMPRIMENTO - EXERCÍCIOS", url: "https://www.youtube.com/watch?v=HobKaKHvCtY"}
+            ]},
+            {sem: 7, bloco: "Matemática", topico: "Funções", cor: "matematica", pdf: "Pág. 163-189", videos: [
+                {nome: "Funções: Plano Cartesiano", url: "https://www.youtube.com/watch?v=iC4q1AGeN5A"},
+                {nome: "PLANO CARTESIANO", url: "https://www.youtube.com/watch?v=EAeTBeEHSD4"},
+                {nome: "GRÁFICO DA FUNÇÃO 1º GRAU", url: "https://www.youtube.com/watch?v=67RECOYU0nA"},
+                {nome: "PLANO CARTESIANO - PRODUTO", url: "https://www.youtube.com/watch?v=Vg8yTl0WvKc"},
+                {nome: "GRÁFICO FUNÇÃO - RÁPIDO", url: "https://www.youtube.com/watch?v=Wb0ceNgBM00"}
+            ]},
+            {sem: 8, bloco: "Matemática", topico: "Estatística", cor: "matematica", pdf: "Pág. 190-216", videos: [
+                {nome: "Análise de gráficos e tabelas", url: "https://www.youtube.com/watch?v=HT9vcpCV5PY"},
+                {nome: "Estatística: Média, Moda, Mediana COM GRÁFICO", url: "https://www.youtube.com/watch?v=MLw4KGoz9VE"},
+                {nome: "ESTATÍSTICA ENEM", url: "https://www.youtube.com/watch?v=X5BUC6Lc8gw"},
+                {nome: "MÉDIA, MEDIANA E MODA", url: "https://www.youtube.com/watch?v=uAtPI64xep4"},
+                {nome: "MEDIDAS DE TENDÊNCIA CENTRAL", url: "https://www.youtube.com/watch?v=GIzwKJL33_g"}
+            ]},
+            {sem: 9, bloco: "Matemática", topico: "🧪 SIMULADO MATEMÁTICA - Revisão", cor: "matematica", pdf: "Pág. 217-244", videos: [
+                {nome: "Resolução de Problemas", url: "https://www.youtube.com/watch?v=RdBBd-UuG54"},
+                {nome: "Dicas para RESOLUÇÃO DE PROBLEMAS", url: "https://www.youtube.com/watch?v=EW27Qn-nmUs"},
+                {nome: "Estratégia de RESOLUÇÃO", url: "https://www.youtube.com/watch?v=sBr6T-WiNOE"},
+                {nome: "5 PASSOS PARA RESOLVER PROBLEMAS", url: "https://www.youtube.com/watch?v=-4AfOVhw8fM"},
+                {nome: "Como Interpretar e Resolver Qualquer Problema", url: "https://www.youtube.com/watch?v=hOPm_9RBBTU"}
+            ]},
 
-        const questoesCN = [
-            {numero: 1, enunciado: "Qual é a principal função das mitocôndrias?", alternativas: {A: "Armazenar genes", B: "Produzir energia", C: "Sintetizar proteínas", D: "Controlar água", E: "Fazer fotossíntese"}, gabarito: "B"},
-            {numero: 2, enunciado: "O que é fotossíntese?", alternativas: {A: "Decomposição", B: "Digestão em plantas", C: "Transformar luz em energia química", D: "Movimento das plantas", E: "Respiração"}, gabarito: "C"},
-            {numero: 3, enunciado: "Qual elemento químico está em todos os seres vivos?", alternativas: {A: "Nitrogênio", B: "Oxigênio", C: "Carbono", D: "Hidrogênio", E: "Enxofre"}, gabarito: "C"},
-            {numero: 4, enunciado: "A velocidade da luz é aproximadamente:", alternativas: {A: "150 mil km/s", B: "300 mil km/s", C: "500 mil km/s", D: "700 mil km/s", E: "1 milhão km/s"}, gabarito: "B"},
-            {numero: 5, enunciado: "Qual é a unidade de medida da força?", alternativas: {A: "Quilograma", B: "Metro", C: "Newton", D: "Pascal", E: "Joule"}, gabarito: "C"},
-            {numero: 6, enunciado: "Quantos ossos tem o esqueleto humano adulto?", alternativas: {A: "186", B: "206", C: "226", D: "246", E: "266"}, gabarito: "B"},
-            {numero: 7, enunciado: "Qual é o gás mais abundante na atmosfera?", alternativas: {A: "Oxigênio", B: "Dióxido de carbono", C: "Nitrogênio", D: "Argônio", E: "Neônio"}, gabarito: "C"},
-            {numero: 8, enunciado: "O que são vírus compostos de?", alternativas: {A: "Células", B: "Proteína e material genético", C: "Apenas proteína", D: "Apenas DNA", E: "Minerais"}, gabarito: "B"},
-            {numero: 9, enunciado: "Qual é a função do coração?", alternativas: {A: "Digerir alimentos", B: "Bombear sangue", C: "Absorver oxigênio", D: "Produzir hormônios", E: "Filtrar impurezas"}, gabarito: "B"},
-            {numero: 10, enunciado: "Quantas câmaras tem o coração humano?", alternativas: {A: "2", B: "3", C: "4", D: "5", E: "6"}, gabarito: "C"},
-            {numero: 11, enunciado: "O que é osmose?", alternativas: {A: "Movimento de células", B: "Movimento de água através de membrana", C: "Movimento de sais", D: "Movimento de gases", E: "Movimento de proteínas"}, gabarito: "B"},
-            {numero: 12, enunciado: "Qual é o menor planeta do sistema solar?", alternativas: {A: "Mercúrio", B: "Vênus", C: "Marte", D: "Plutão", E: "Netuno"}, gabarito: "A"},
-            {numero: 13, enunciado: "Quantas camadas tem a pele?", alternativas: {A: "1", B: "2", C: "3", D: "4", E: "5"}, gabarito: "C"},
-            {numero: 14, enunciado: "O que causa o eclipse solar?", alternativas: {A: "Rotação da Terra", B: "Lua entre Terra e Sol", C: "Sol entre Terra e Lua", D: "Órbita de Mercúrio", E: "Movimento de asteroides"}, gabarito: "B"},
-            {numero: 15, enunciado: "Qual é o ponto de ebulição da água?", alternativas: {A: "50°C", B: "75°C", C: "100°C", D: "150°C", E: "200°C"}, gabarito: "C"},
-            {numero: 16, enunciado: "O que são bactérias?", alternativas: {A: "Vírus grandes", B: "Células procarióticas", C: "Células eucarióticas", D: "Fungos", E: "Protozoários"}, gabarito: "B"},
-            {numero: 17, enunciado: "Quantas fases tem a mitose?", alternativas: {A: "2", B: "3", C: "4", D: "5", E: "6"}, gabarito: "C"},
-            {numero: 18, enunciado: "Qual é a fonte primária de energia para a maioria dos seres vivos?", alternativas: {A: "Lua", B: "Sol", C: "Terra", D: "Vulcões", E: "Reações nucleares"}, gabarito: "B"}
-        ];
+            // CIÊNCIAS NATURAIS (Semanas 10-18)
+            {sem: 10, bloco: "Ciências Naturais", topico: "Método Científico", cor: "cn", pdf: "Pág. 1-34", videos: [
+                {nome: "MÉTODO CIENTÍFICO - Aula completa", url: "https://www.youtube.com/watch?v=MxjGqqmddS0"},
+                {nome: "MÉTODO CIENTÍFICO - Ensino Fundamental", url: "https://www.youtube.com/watch?v=MU4EmLqIdDE"},
+                {nome: "O Método Científico - Questões", url: "https://www.youtube.com/watch?v=S1nNQRmplEo"},
+                {nome: "Método científico: passos", url: "https://www.youtube.com/watch?v=u0cR1w3sKHA"},
+                {nome: "MÉTODO CIENTÍFICO - Etapas", url: "https://www.youtube.com/watch?v=00jFpyboNWM"}
+            ]},
+            {sem: 11, bloco: "Ciências Naturais", topico: "Leis de Newton", cor: "cn", pdf: "Pág. 35-68", videos: [
+                {nome: "Leis de Newton força e movimento", url: "https://www.youtube.com/watch?v=9oUPHT9Zz44"},
+                {nome: "Leis de Newton: Conceito de força", url: "https://www.youtube.com/watch?v=lpe7mT2LSuY"},
+                {nome: "AS TRÊS LEIS DE NEWTON", url: "https://www.youtube.com/watch?v=UM_RzhJakEQ"},
+                {nome: "LEIS DE NEWTON - FÍSICA DO ZERO", url: "https://www.youtube.com/watch?v=iuPrkzJp20I"},
+                {nome: "As leis de Newton - Ensino Médio", url: "https://www.youtube.com/watch?v=O8Q2jzf002g"}
+            ]},
+            {sem: 12, bloco: "Ciências Naturais", topico: "Energia e Trabalho", cor: "cn", pdf: "Pág. 69-102", videos: [
+                {nome: "TRABALHO, POTÊNCIA E ENERGIA", url: "https://www.youtube.com/watch?v=rb6VPKWOcp0"},
+                {nome: "Energia Potencial Gravitacional", url: "https://www.youtube.com/watch?v=gvEwCimfwKc"},
+                {nome: "ENERGIA POTENCIAL E TRABALHO", url: "https://www.youtube.com/watch?v=SfYOPmkTICI"},
+                {nome: "ENERGIA POTENCIAL GRAVITACIONAL", url: "https://www.youtube.com/watch?v=976QadOKOEo"},
+                {nome: "ENERGIA CINÉTICA E POTENCIAL", url: "https://www.youtube.com/watch?v=CQFnmOIuxi8"}
+            ]},
+            {sem: 13, bloco: "Ciências Naturais", topico: "Tabela Periódica", cor: "cn", pdf: "Pág. 103-136", videos: [
+                {nome: "TABELA PERIÓDICA: organização", url: "https://www.youtube.com/watch?v=mfObV_CKrYo"},
+                {nome: "A Tabela Periódica dos Elementos", url: "https://www.youtube.com/watch?v=oUOcPWytESE"},
+                {nome: "Tabela periódica - classificação", url: "https://www.youtube.com/watch?v=mlq58sRaLKw"},
+                {nome: "Periodicidade dos elementos", url: "https://www.youtube.com/watch?v=_m1g8m_ozMg"},
+                {nome: "TABELA PERIÓDICA E DISTRIBUIÇÃO", url: "https://www.youtube.com/watch?v=6OI4cBNkGOU"}
+            ]},
+            {sem: 14, bloco: "Ciências Naturais", topico: "Reações Químicas", cor: "cn", pdf: "Pág. 137-170", videos: [
+                {nome: "Reações Ácido-Base", url: "https://www.youtube.com/watch?v=obowAuy3SUk"},
+                {nome: "Reações ácido base", url: "https://www.youtube.com/watch?v=IdpxrIYN9UM"},
+                {nome: "pH de soluções aquosas", url: "https://www.youtube.com/watch?v=EsXahRCqvX0"},
+                {nome: "Neutralização de ácidos e bases", url: "https://www.youtube.com/watch?v=z_TLTy_kiQA"},
+                {nome: "Reação de Ácido-Base", url: "https://www.youtube.com/watch?v=HbeijJh6A0E"}
+            ]},
+            {sem: 15, bloco: "Ciências Naturais", topico: "Célula e Divisão", cor: "cn", pdf: "Pág. 171-204", videos: [
+                {nome: "Divisão Celular - Mitose", url: "https://www.youtube.com/watch?v=vMadp5MiLbQ"},
+                {nome: "Mitose vs. Meiose", url: "https://www.youtube.com/watch?v=EkRs9kL5Kw4"},
+                {nome: "Mitose - Divisão Celular", url: "https://www.youtube.com/watch?v=kfofwQOMc0o"},
+                {nome: "Divisão celular: mitose", url: "https://www.youtube.com/watch?v=gAikprrKpK4"},
+                {nome: "MITOSE E MEIOSE - Diferenças", url: "https://www.youtube.com/watch?v=dDa_o2_A8QU"}
+            ]},
+            {sem: 16, bloco: "Ciências Naturais", topico: "Genética e DNA", cor: "cn", pdf: "Pág. 205-238", videos: [
+                {nome: "MENDEL: O SEGREDO da HERANÇA", url: "https://www.youtube.com/watch?v=KXE0-MhaieU"},
+                {nome: "Conceitos básicos da genética", url: "https://www.youtube.com/watch?v=IHsA7T3yWqE"},
+                {nome: "GENÉTICA: LEIS DE MENDEL, GENES, DNA E CROMOSSOMOS", url: "https://www.youtube.com/watch?v=-Vv3USW7iRU"},
+                {nome: "Primeira lei de Mendel e cruzamentos genéticos", url: "https://www.youtube.com/watch?v=jZH_S4b1elQ"},
+                {nome: "PRIMEIRA LEI DE MENDEL | GENÉTICA", url: "https://www.youtube.com/watch?v=o9XcjlufW2k"}
+            ]},
+            {sem: 17, bloco: "Ciências Naturais", topico: "Ecologia", cor: "cn", pdf: "Pág. 239-272", videos: [
+                {nome: "RELAÇÕES ECOLÓGICAS - Harmônicas e Desarmônicas", url: "https://www.youtube.com/watch?v=--axTRLZLsE"},
+                {nome: "Relações ecológicas, ecossistemas, biomas", url: "https://www.youtube.com/watch?v=xo01cGj8sOs"},
+                {nome: "Relações ecológicas - Biologia", url: "https://www.youtube.com/watch?v=Esuj70_CoEw"},
+                {nome: "ECOLOGIA - RELAÇÕES ECOLÓGICAS", url: "https://www.youtube.com/watch?v=ooZ_FCYGS8w"},
+                {nome: "ECOLOGIA: CADEIA ALIMENTAR, BIOMAS E RELAÇÕES", url: "https://www.youtube.com/watch?v=TsclSi3nNsI"}
+            ]},
+            {sem: 18, bloco: "Ciências Naturais", topico: "🧪 SIMULADO CN - Revisão", cor: "cn", pdf: "Pág. 273-300", videos: [
+                {nome: "CADEIAS ALIMENTARES | Resumo de Biologia", url: "https://www.youtube.com/watch?v=Kn0naS7PiUs"},
+                {nome: "Cadeias e Teias Alimentares", url: "https://www.youtube.com/watch?v=QPFeWfM_6fs"},
+                {nome: "Cadeia alimentar e teia alimentar", url: "https://www.youtube.com/watch?v=wmVhZQN8-m4"},
+                {nome: "CADEIA ALIMENTAR E TEIA ALIMENTAR - ECOLOGIA", url: "https://www.youtube.com/watch?v=QQAqN7qL8Yg"},
+                {nome: "Cadeias, Teias e Pirâmides Alimentares", url: "https://www.youtube.com/watch?v=MVS8OoYCCaE"}
+            ]},
 
-        const questoesCH = [
-            {numero: 1, enunciado: "Em que ano terminou a Primeira Guerra Mundial?", alternativas: {A: "1815", B: "1914", C: "1918", D: "1920", E: "1925"}, gabarito: "C"},
-            {numero: 2, enunciado: "Qual foi a principal causa do Renascimento italiano?", alternativas: {A: "Reforma Protestante", B: "Revolução Francesa", C: "Resgate da cultura greco-romana", D: "Iluminismo", E: "Industrialização"}, gabarito: "C"},
-            {numero: 3, enunciado: "Qual é a capital do Brasil?", alternativas: {A: "São Paulo", B: "Brasília", C: "Rio de Janeiro", D: "Salvador", E: "Belo Horizonte"}, gabarito: "B"},
-            {numero: 4, enunciado: "Qual é o continente mais populoso?", alternativas: {A: "África", B: "Europa", C: "América do Norte", D: "Ásia", E: "Oceania"}, gabarito: "D"},
-            {numero: 5, enunciado: "Qual é o conceito de cultura?", alternativas: {A: "Apenas arte", B: "Valores e costumes", C: "Educação formal", D: "Refinamento", E: "Estudos científicos"}, gabarito: "B"},
-            {numero: 6, enunciado: "Quando Cristóvão Colombo chegou à América?", alternativas: {A: "1490", B: "1491", C: "1492", D: "1493", E: "1494"}, gabarito: "C"},
-            {numero: 7, enunciado: "Qual é o rio mais longo do Brasil?", alternativas: {A: "São Francisco", B: "Amazonas", C: "Paraná", D: "Negro", E: "Tapajós"}, gabarito: "B"},
-            {numero: 8, enunciado: "Qual é o maior deserto do mundo?", alternativas: {A: "Arabia", B: "Kalahari", C: "Saara", D: "Atacama", E: "Gobi"}, gabarito: "C"},
-            {numero: 9, enunciado: "Em que ano começou a Primeira Guerra Mundial?", alternativas: {A: "1912", B: "1913", C: "1914", D: "1915", E: "1916"}, gabarito: "C"},
-            {numero: 10, enunciado: "Qual é a população aproximada do Brasil?", alternativas: {A: "100 milhões", B: "150 milhões", C: "200 milhões", D: "250 milhões", E: "300 milhões"}, gabarito: "C"},
-            {numero: 11, enunciado: "Quantas regiões tem o Brasil?", alternativas: {A: "3", B: "4", C: "5", D: "6", E: "7"}, gabarito: "C"},
-            {numero: 12, enunciado: "Qual é a maior floresta tropical do mundo?", alternativas: {A: "Congo", B: "Amazônia", C: "Mato Grosso", D: "Cerrado", E: "Pantanal"}, gabarito: "B"},
-            {numero: 13, enunciado: "Quantos estados tem o Brasil?", alternativas: {A: "25", B: "26", C: "27", D: "28", E: "29"}, gabarito: "C"},
-            {numero: 14, enunciado: "Qual é a moeda do Brasil?", alternativas: {A: "Cruzado", B: "Cruzeiro", C: "Real", D: "Peso", E: "Dólar"}, gabarito: "C"},
-            {numero: 15, enunciado: "Em que século foi a Revolução Industrial?", alternativas: {A: "XVI", B: "XVII", C: "XVIII", D: "XIX", E: "XX"}, gabarito: "C"},
-            {numero: 16, enunciado: "Qual é o maior país da América Latina?", alternativas: {A: "México", B: "Brasil", C: "Argentina", D: "Colômbia", E: "Peru"}, gabarito: "B"},
-            {numero: 17, enunciado: "Qual é o menor país do mundo?", alternativas: {A: "Mônaco", B: "Liechtenstein", C: "Vaticano", D: "Malta", E: "São Marino"}, gabarito: "C"},
-            {numero: 18, enunciado: "Quantos presidentes o Brasil teve?", alternativas: {A: "25", B: "30", C: "35", D: "40", E: "45"}, gabarito: "C"}
-        ];
-
-        const questoesLG = [
-            {numero: 1, enunciado: "Identifique o sujeito: 'O gato subiu no telhado.'", alternativas: {A: "subiu", B: "telhado", C: "gato", D: "no", E: "o"}, gabarito: "C"},
-            {numero: 2, enunciado: "Qual é o sinônimo de 'delgado'?", alternativas: {A: "Gordo", B: "Fino", C: "Grosso", D: "Largo", E: "Volumoso"}, gabarito: "B"},
-            {numero: 3, enunciado: "Em que tempo verbal: 'Eu estou estudando'?", alternativas: {A: "Presente", B: "Passado", C: "Futuro", D: "Condicional", E: "Subjuntivo"}, gabarito: "A"},
-            {numero: 4, enunciado: "O que é um adjetivo?", alternativas: {A: "Nomeia seres", B: "Expressa ações", C: "Modifica nomes", D: "Invariável", E: "Liga orações"}, gabarito: "C"},
-            {numero: 5, enunciado: "Qual é a função do advérbio?", alternativas: {A: "Nomear", B: "Modificar verbos/adjetivos", C: "Ligar orações", D: "Expressar posse", E: "Indicar quantidade"}, gabarito: "B"},
-            {numero: 6, enunciado: "Qual é o plural de 'cristal'?", alternativas: {A: "cristáis", B: "cristais", C: "cristales", D: "cristaes", E: "cristáles"}, gabarito: "B"},
-            {numero: 7, enunciado: "Qual é o oposto de 'claro'?", alternativas: {A: "Brilhante", B: "Luminoso", C: "Escuro", D: "Transparente", E: "Nítido"}, gabarito: "C"},
-            {numero: 8, enunciado: "Identifique o verbo: 'As crianças correm no parque.'", alternativas: {A: "crianças", B: "correm", C: "parque", D: "no", E: "as"}, gabarito: "B"},
-            {numero: 9, enunciado: "Qual é o plural de 'pão'?", alternativas: {A: "pões", B: "pães", C: "paes", D: "pains", E: "pãos"}, gabarito: "B"},
-            {numero: 10, enunciado: "O que é um pronome?", alternativas: {A: "Nomeia seres", B: "Expressa ações", C: "Substitui nomes", D: "Modifica nomes", E: "Liga orações"}, gabarito: "C"},
-            {numero: 11, enunciado: "Qual é o verbo no infinitivo: 'correndo'?", alternativas: {A: "corro", B: "correr", C: "corri", D: "corre", E: "correria"}, gabarito: "B"},
-            {numero: 12, enunciado: "Qual é o sinônimo de 'triste'?", alternativas: {A: "Alegre", B: "Melancólico", C: "Feliz", D: "Divertido", E: "Radiante"}, gabarito: "B"},
-            {numero: 13, enunciado: "Como se escreve corretamente?", alternativas: {A: "Açucar", B: "Asucar", C: "Açúcar", D: "Açucar", E: "Açucar"}, gabarito: "C"},
-            {numero: 14, enunciado: "Qual é a preposição em: 'Vou a São Paulo'?", alternativas: {A: "Vou", B: "a", C: "São", D: "Paulo", E: "ir"}, gabarito: "B"},
-            {numero: 15, enunciado: "Qual é o feminino de 'ator'?", alternativas: {A: "atora", B: "atriz", C: "atresse", D: "atoare", E: "atrice"}, gabarito: "B"},
-            {numero: 16, enunciado: "Identifique a conjunção: 'Você veio mas chegou atrasado.'", alternativas: {A: "Você", B: "veio", C: "mas", D: "chegou", E: "atrasado"}, gabarito: "C"},
-            {numero: 17, enunciado: "Qual é o particípio de 'fazer'?", alternativas: {A: "fazendo", B: "faço", C: "feito", D: "fizer", E: "fizera"}, gabarito: "C"},
-            {numero: 18, enunciado: "Como se escreve: 'eu ____ à festa'?", alternativas: {A: "fui", B: "foi", C: "vou", D: "ia", E: "irei"}, gabarito: "A"}
+            // CIÊNCIAS HUMANAS (Semanas 19-27)
+            {sem: 19, bloco: "Ciências Humanas", topico: "Cultura e Identidade", cor: "ch", pdf: "Pág. 1-23", videos: [
+                {nome: "As HISTÓRIA do BRASIL em 4 minutos", url: "https://www.youtube.com/watch?v=QQtYVp--QXo"},
+                {nome: "Cultura e identidade brasileira", url: "https://www.youtube.com/watch?v=pQPC1mi6GTY"},
+                {nome: "Cultura brasileira e Identidade", url: "https://www.youtube.com/watch?v=0v583AWWlHw"},
+                {nome: "A IDENTIDADE NACIONAL BRASILEIRA", url: "https://www.youtube.com/watch?v=D5PnqEv5oj8"},
+                {nome: "A diversidade cultural brasileira", url: "https://www.youtube.com/watch?v=gsK1LxVK0r8"}
+            ]},
+            {sem: 20, bloco: "Ciências Humanas", topico: "Território e Geografia", cor: "ch", pdf: "Pág. 24-46", videos: [
+                {nome: "ESPAÇO GEOGRÁFICO BRASILEIRO", url: "https://www.youtube.com/watch?v=6AecFxxHPlo"},
+                {nome: "Espaço Geográfico - Brasil Escola", url: "https://www.youtube.com/watch?v=vonz6HrVhWc"},
+                {nome: "Território Brasileiro - Introdução", url: "https://www.youtube.com/watch?v=K11trYEdWFk"},
+                {nome: "Localização e extensão territorial do Brasil", url: "https://www.youtube.com/watch?v=5NKt3FKV12Y"},
+                {nome: "O Espaço geográfico brasileiro", url: "https://www.youtube.com/watch?v=hfnH_QItozQ"}
+            ]},
+            {sem: 21, bloco: "Ciências Humanas", topico: "Natureza e Ambiente", cor: "ch", pdf: "Pág. 47-69", videos: [
+                {nome: "A FORMAÇÃO DO ESPAÇO GEOGRÁFICO BRASILEIRO", url: "https://www.youtube.com/watch?v=BAVJCRbnAW0"},
+                {nome: "ORGANIZAÇÃO DO ESPAÇO GEOGRÁFICO BRASILEIRO", url: "https://www.youtube.com/watch?v=hFEv9iFEdBo"},
+                {nome: "Geografia - Formação do território brasileiro", url: "https://www.youtube.com/watch?v=UP9WLxsOCYs"},
+                {nome: "Espaço Geográfico - Geobrasil", url: "https://www.youtube.com/watch?v=tzIMkUE0XiQ"},
+                {nome: "Conceitos de espaço geográfico, região, lugar", url: "https://www.youtube.com/watch?v=ExJO6rncnwg"}
+            ]},
+            {sem: 22, bloco: "Ciências Humanas", topico: "Estado e Política", cor: "ch", pdf: "Pág. 70-92", videos: [
+                {nome: "Filosofia - Noções de direitos humanos e cidadania", url: "https://www.youtube.com/watch?v=p_yfxFs8j54"},
+                {nome: "Geografia - Noções de direitos humanos", url: "https://www.youtube.com/watch?v=hC3BY39IXmg"},
+                {nome: "Democracia Cidadania e Direitos Humanos", url: "https://www.youtube.com/watch?v=8vrXZHnl5mA"},
+                {nome: "História - Noções de direitos humanos e cidadania", url: "https://www.youtube.com/watch?v=eieKl-yRKz4"},
+                {nome: "Sociologia - Cidadania e Direitos Humanos", url: "https://www.youtube.com/watch?v=sH6Pvowg1U8"}
+            ]},
+            {sem: 23, bloco: "Ciências Humanas", topico: "Direito e Cidadania", cor: "ch", pdf: "Pág. 93-115", videos: [
+                {nome: "Democracia, Cidadania e Direitos Humanos | Revisão Enem", url: "https://www.youtube.com/watch?v=8M3NHRaXsX0"},
+                {nome: "Democracia e Cidadania: direitos civis, políticos e sociais", url: "https://www.youtube.com/watch?v=yMJUWb--YdQ"},
+                {nome: "CIDADANIA E DIREITOS HUMANOS", url: "https://www.youtube.com/watch?v=Qr8SkeplBqg"},
+                {nome: "EDUCAÇÃO / DIREITOS HUMANOS", url: "https://www.youtube.com/watch?v=v5WrPevUVe8"},
+                {nome: "Democracia, Cidadania e Direitos", url: "https://www.youtube.com/watch?v=8M3NHRaXsX0"}
+            ]},
+            {sem: 24, bloco: "Ciências Humanas", topico: "História do Brasil", cor: "ch", pdf: "Pág. 116-138", videos: [
+                {nome: "Aula de História: Colonização Portuguesa no Brasil", url: "https://www.youtube.com/watch?v=D38xy_Syfsg"},
+                {nome: "Colonização - Histórias do Brasil", url: "https://www.youtube.com/watch?v=zpNr6KKH8d8"},
+                {nome: "Início da colonização do Brasil", url: "https://www.youtube.com/watch?v=U8j4-zYk4q8"},
+                {nome: "COLONIZAÇÃO DO BRASIL A PARTIR DE 1530", url: "https://www.youtube.com/watch?v=ONd1RtatThs"},
+                {nome: "História do Brasil | Documentário Histórico", url: "https://www.youtube.com/watch?v=EqTFNgdWAJk"}
+            ]},
+            {sem: 25, bloco: "Ciências Humanas", topico: "Urbanização e Industrialização", cor: "ch", pdf: "Pág. 139-161", videos: [
+                {nome: "Industrialização brasileira", url: "https://www.youtube.com/watch?v=B9lXVVA2vgE"},
+                {nome: "Urbanização e Industrialização DO BRASIL", url: "https://www.youtube.com/watch?v=EpIsGZF653k"},
+                {nome: "Industrialização e urbanização no Brasil", url: "https://www.youtube.com/watch?v=jmvF92RDk-I"},
+                {nome: "Urbanização brasileira", url: "https://www.youtube.com/watch?v=Gt3hkSupWKM"},
+                {nome: "INDUSTRIALIZAÇÃO E URBANIZAÇÃO", url: "https://www.youtube.com/watch?v=j_VHs4Re2mk"}
+            ]},
+            {sem: 26, bloco: "Ciências Humanas", topico: "Trabalho e Tecnologia", cor: "ch", pdf: "Pág. 162-184", videos: [
+                {nome: "A Globalização e sua relação com a tecnologia e economia", url: "https://www.youtube.com/watch?v=ShdyrWt2d8s"},
+                {nome: "SOS ProENEM - Globalização, economia e trabalho", url: "https://www.youtube.com/watch?v=9GhJDURV-HY"},
+                {nome: "O Trabalho no contexto da Globalização", url: "https://www.youtube.com/watch?v=kv_vh7C2Ycc"},
+                {nome: "O Trabalho na era da Globalização", url: "https://www.youtube.com/watch?v=WLnBPIQsQOs"},
+                {nome: "Globalização", url: "https://www.youtube.com/watch?v=h5WjNMGztvE"}
+            ]},
+            {sem: 27, bloco: "Ciências Humanas", topico: "🧪 SIMULADO CH - Revisão", cor: "ch", pdf: "Pág. 185-204", videos: [
+                {nome: "GEOGRAFIA - A Globalização no Mercado de Trabalho", url: "https://www.youtube.com/watch?v=ewhOlFEhpd4"},
+                {nome: "A Globalização e as tecnologias do cotidiano", url: "https://www.youtube.com/watch?v=yOCRBrUZuu4"},
+                {nome: "GEOGRAFIA - Tecnologia na Globalização", url: "https://www.youtube.com/watch?v=F_tYBCko31k"},
+                {nome: "GLOBALIZAÇÃO, TECNOLOGIA DA INFORMAÇÃO", url: "https://www.youtube.com/watch?v=1fks4uwZGGM"},
+                {nome: "A Globalização - Geografia", url: "https://www.youtube.com/watch?v=Q_1e23EcGE4"}
+            ]}
         ];
 
         // ===== VARIÁVEIS GLOBAIS =====
-        let questoesAtuais = [];
-        let questaoAtual = 0;
-        let respostas = {};
-        let totalAcertos = 0;
-        let cronometroIntervalo = null;
-        let cronometroSegundos = 0;
-        let simuladoPausado = false;
+        let totalVideos = 0;
+        let videosMarcados = 0;
 
-        // ===== PLANO DAS 36 SEMANAS =====
-        const plano = [
-            {sem: 1, bloco: "Matemática", topico: "Números e Operações Básicas", cor: "matematica", pdf: "Pág. 1-20", aula: "https://www.youtube.com/watch?v=xifNbyaD9Qo", quiz: [
-                {q: "Qual é o resultado de 25 + 37?", ops: ["52", "62", "72", "82"], r: "B"},
-                {q: "Quanto é 100 ÷ 5?", ops: ["15", "20", "25", "30"], r: "B"}
-            ]},
-            {sem: 2, bloco: "Matemática", topico: "Frações e Decimais", cor: "matematica", pdf: "Pág. 21-45", aula: "https://www.youtube.com/watch?v=fPtqcplToOg", quiz: [
-                {q: "Quanto é 1/2 + 1/4?", ops: ["1/4", "1/2", "3/4", "1"], r: "C"},
-                {q: "Quanto é 0.5 + 0.25?", ops: ["0.30", "0.50", "0.75", "1.00"], r: "C"}
-            ]},
-            {sem: 3, bloco: "Matemática", topico: "Razão, Proporção e Porcentagem", cor: "matematica", pdf: "Pág. 46-70", aula: "https://www.youtube.com/playlist?list=PL4U6z74-Hp2-VpWZXmSBM_nkmrPOUZ5Dk", quiz: [
-                {q: "Qual é 50% de 200?", ops: ["50", "100", "150", "200"], r: "B"},
-                {q: "Se 2 está para 4 como x está para 8, x é?", ops: ["2", "4", "6", "8"], r: "B"}
-            ]},
-            {sem: 4, bloco: "Matemática", topico: "Expressões Algébricas", cor: "matematica", pdf: "Pág. 71-95", aula: "https://www.youtube.com/watch?v=ilkU0mCw8pc", quiz: [
-                {q: "Simplifique: 2x + 3x", ops: ["5x", "6x", "x", "x²"], r: "A"},
-                {q: "Se x = 5, quanto é 2x + 3?", ops: ["8", "10", "13", "15"], r: "C"}
-            ]},
-            {sem: 5, bloco: "Matemática", topico: "Equações Lineares", cor: "matematica", pdf: "Pág. 96-120", aula: "https://www.youtube.com/playlist?list=PLTPg64KdGgYgFpOFt2TETLdEuBB4fvxxf", quiz: [
-                {q: "Resolva: x + 5 = 12", ops: ["x = 5", "x = 7", "x = 12", "x = 17"], r: "B"},
-                {q: "Resolva: 2x = 10", ops: ["x = 2", "x = 5", "x = 10", "x = 20"], r: "B"}
-            ]},
-            {sem: 6, bloco: "Matemática", topico: "Equações Quadráticas", cor: "matematica", pdf: "Pág. 121-150", aula: "https://www.youtube.com/watch?v=sA7mgwW-EPs", quiz: [
-                {q: "Na equação x² + 2x + 1 = 0, qual é a solução?", ops: ["x = 1", "x = -1", "x = 0", "x = 2"], r: "B"},
-                {q: "Qual é o discriminante de x² - 5x + 6?", ops: ["1", "2", "3", "4"], r: "A"}
-            ]},
-            {sem: 7, bloco: "Matemática", topico: "Funções", cor: "matematica", pdf: "Pág. 151-190", aula: "https://www.youtube.com/playlist?list=PL4U6z74-Hp28KEjfl7u-1dNJSpX5nyoCF", quiz: [
-                {q: "Se f(x) = 2x + 1, quanto é f(3)?", ops: ["5", "6", "7", "8"], r: "C"},
-                {q: "Qual é o domínio de f(x) = √x?", ops: ["x > 0", "x ≥ 0", "x < 0", "Todos os reais"], r: "B"}
-            ]},
-            {sem: 8, bloco: "Matemática", topico: "Gráficos e Estatística", cor: "matematica", pdf: "Pág. 191-244", aula: "https://www.youtube.com/watch?v=sA7mgwW-EPs", quiz: [
-                {q: "Qual é a média de 10, 20 e 30?", ops: ["15", "20", "25", "30"], r: "B"},
-                {q: "Qual é a mediana de 1, 3, 5, 7, 9?", ops: ["3", "5", "7", "9"], r: "B"}
-            ]},
-            {sem: 9, bloco: "Matemática", topico: "🧪 SIMULADO MATEMÁTICA", cor: "matematica", pdf: "Revisão", aula: "", quiz: []},
-            {sem: 10, bloco: "Ciências Naturais", topico: "Introdução à Ciência e Método Científico", cor: "cn", pdf: "Pág. 1-30", aula: "https://www.youtube.com/watch?v=yTeOTLWyZ6Y", quiz: [
-                {q: "Qual é o primeiro passo do método científico?", ops: ["Observação", "Hipótese", "Conclusão", "Teste"], r: "A"},
-                {q: "O que é uma variável independente?", ops: ["Aquela que não muda", "Aquela que o cientista controla", "Aquela que é medida", "Aquela que não existe"], r: "B"}
-            ]},
-            {sem: 11, bloco: "Ciências Naturais", topico: "Física Básica - Movimentos e Forças", cor: "cn", pdf: "Pág. 150-200", aula: "https://www.youtube.com/watch?v=lEn6FyodpS0", quiz: [
-                {q: "Qual é a unidade de força no SI?", ops: ["kg", "m/s", "Newton", "Joule"], r: "C"},
-                {q: "Qual é a velocidade média de um carro que viaja 100 km em 2 h?", ops: ["40 km/h", "50 km/h", "60 km/h", "80 km/h"], r: "B"}
-            ]},
-            {sem: 12, bloco: "Ciências Naturais", topico: "Química Básica - Átomos e Moléculas", cor: "cn", pdf: "Pág. 201-250", aula: "https://www.youtube.com/watch?v=fbYtkhlv8wI", quiz: [
-                {q: "Qual é o número atômico do carbono?", ops: ["6", "8", "12", "14"], r: "A"},
-                {q: "Quantos elétrons tem um átomo neutro de oxigênio?", ops: ["6", "8", "10", "16"], r: "B"}
-            ]},
-            {sem: 13, bloco: "Ciências Naturais", topico: "Biologia Celular", cor: "cn", pdf: "Pág. 251-300", aula: "https://www.youtube.com/watch?v=m3o7A8iU4HE", quiz: [
-                {q: "Qual é a principal função das mitocôndrias?", ops: ["Armazenar genes", "Produzir energia", "Sintetizar proteínas", "Controlar água"], r: "B"},
-                {q: "O que é fotossíntese?", ops: ["Decomposição", "Digestão", "Transformar luz em energia", "Respiração"], r: "C"}
-            ]},
-            {sem: 14, bloco: "Ciências Naturais", topico: "Fisiologia Humana", cor: "cn", pdf: "Pág. 100-150", aula: "https://www.youtube.com/watch?v=Gj7pNJn--9w", quiz: [
-                {q: "Quantas câmaras tem o coração?", ops: ["2", "3", "4", "5"], r: "C"},
-                {q: "Qual é a função do coração?", ops: ["Digerir", "Bombear sangue", "Absorver O2", "Produzir hormônios"], r: "B"}
-            ]},
-            {sem: 15, bloco: "Ciências Naturais", topico: "Genética e Evolução", cor: "cn", pdf: "Pág. 270-300", aula: "https://www.youtube.com/@MundooNatural", quiz: [
-                {q: "Quem propôs a teoria da evolução?", ops: ["Mendel", "Darwin", "Lamarck", "Cuvier"], r: "B"},
-                {q: "Qual é a unidade básica da hereditariedade?", ops: ["Célula", "Gene", "Proteína", "DNA"], r: "B"}
-            ]},
-            {sem: 16, bloco: "Ciências Naturais", topico: "Ecologia e Meio Ambiente", cor: "cn", pdf: "Pág. 280-300", aula: "https://www.youtube.com/watch?v=oIr8a1gVkBg", quiz: [
-                {q: "O que é um ecossistema?", ops: ["Só seres vivos", "Só ambiente", "Seres vivos + ambiente", "Só plantas"], r: "C"},
-                {q: "O que é biodiversidade?", ops: ["Variedade de cores", "Variedade de seres vivos", "Variedade de alimentos", "Variedade de climas"], r: "B"}
-            ]},
-            {sem: 17, bloco: "Ciências Naturais", topico: "Tecnologia e Inovação", cor: "cn", pdf: "Pág. 30-80", aula: "https://www.youtube.com/watch?v=fbYtkhlv8wI", quiz: [
-                {q: "O que é biotecnologia?", ops: ["Tecnologia do vidro", "Uso de organismos em tecnologia", "Tecnologia de máquinas", "Tecnologia de energia"], r: "B"},
-                {q: "Qual é a importância da nanotecnologia?", ops: ["Apenas curiosidade", "Criar materiais novos", "Destruir poluentes", "Criar armas"], r: "B"}
-            ]},
-            {sem: 18, bloco: "Ciências Naturais", topico: "🧪 SIMULADO CN", cor: "cn", pdf: "Revisão", aula: "", quiz: []},
-            {sem: 19, bloco: "Ciências Humanas", topico: "Cultura, Identidade e Sociedade", cor: "ch", pdf: "Pág. 1-30", aula: "https://www.youtube.com/watch?v=AarDJ7mTWPs", quiz: [
-                {q: "O que é cultura?", ops: ["Apenas arte", "Valores e costumes", "Educação formal", "Refinamento"], r: "B"},
-                {q: "O que é identidade cultural?", ops: ["Nome da pessoa", "Características únicas de um grupo", "Cor da pele", "Língua falada"], r: "B"}
-            ]},
-            {sem: 20, bloco: "Ciências Humanas", topico: "Territorialidade e Espaço Geográfico", cor: "ch", pdf: "Pág. 31-60", aula: "https://www.youtube.com/playlist?list=PL4U6z74-Hp294RBRVhZ84WGFaYrZz_4Oo", quiz: [
-                {q: "O que é um território?", ops: ["Uma cidade", "Espaço sob controle de um grupo", "Um país", "Uma montanha"], r: "B"},
-                {q: "Qual é o maior país da América do Sul?", ops: ["Peru", "Brasil", "Argentina", "Chile"], r: "B"}
-            ]},
-            {sem: 21, bloco: "Ciências Humanas", topico: "Processos Naturais e Sociedade", cor: "ch", pdf: "Pág. 61-90", aula: "https://www.youtube.com/watch?v=ZgoJp0vzPBg", quiz: [
-                {q: "O que causa as estações do ano?", ops: ["Rotação da Terra", "Inclinação do eixo", "Vulcões", "Correntes oceânicas"], r: "B"},
-                {q: "Como a sociedade se relaciona com a natureza?", ops: ["Sem relação", "Explorando recursos", "Destruindo", "Coexistindo"], r: "B"}
-            ]},
-            {sem: 22, bloco: "Ciências Humanas", topico: "Estado, Direito e Política", cor: "ch", pdf: "Pág. 91-120", aula: "https://www.youtube.com/watch?v=pc_5zrZ1KX8", quiz: [
-                {q: "O que é um Estado?", ops: ["Um prédio", "Organização política e social", "Uma lei", "Um governo"], r: "B"},
-                {q: "Qual é a função da democracia?", ops: ["Governar sozinho", "Participação do povo", "Obedecer ordens", "Ninguém decide"], r: "B"}
-            ]},
-            {sem: 23, bloco: "Ciências Humanas", topico: "Cidadania e Direitos Humanos", cor: "ch", pdf: "Pág. 121-150", aula: "https://www.youtube.com/watch?v=mIhUa1ilAOU", quiz: [
-                {q: "O que é cidadania?", ops: ["Morar em uma cidade", "Ser um membro da sociedade", "Ter documentos", "Falar português"], r: "B"},
-                {q: "Quais são direitos humanos?", ops: ["Só para ricos", "Para alguns", "Universais e inalienáveis", "Para maioria"], r: "C"}
-            ]},
-            {sem: 24, bloco: "Ciências Humanas", topico: "História Geral - Antiga e Medieval", cor: "ch", pdf: "Pág. 200-204", aula: "https://www.youtube.com/watch?v=TEFt0CvVwbA", quiz: [
-                {q: "Em que século terminou a Idade Média?", ops: ["XIII", "XIV", "XV", "XVI"], r: "C"},
-                {q: "Qual foi a grande civilização do Egito?", ops: ["Grécia", "Roma", "Egito Antigo", "Mesopotâmia"], r: "C"}
-            ]},
-            {sem: 25, bloco: "Ciências Humanas", topico: "História Moderna e Contemporânea", cor: "ch", pdf: "Pág. 200-204", aula: "https://www.youtube.com/watch?v=INPs7YvyWMo", quiz: [
-                {q: "Em que ano terminou a 2ª Guerra Mundial?", ops: ["1943", "1944", "1945", "1946"], r: "C"},
-                {q: "Qual foi a principal consequência do Iluminismo?", ops: ["Escuridão", "Valorização da razão", "Retorno ao medieval", "Fim do conhecimento"], r: "B"}
-            ]},
-            {sem: 26, bloco: "Ciências Humanas", topico: "Filosofia e Ética", cor: "ch", pdf: "Páginas variadas", aula: "https://www.youtube.com/watch?v=ZgoJp0vzPBg", quiz: [
-                {q: "O que é ética?", ops: ["Lei de trânsito", "Conjunto de valores morais", "Religião", "Filosofia"], r: "B"},
-                {q: "O que é moral?", ops: ["Apenas religião", "Regras de conduta", "Lei escrita", "Opinião pessoal"], r: "B"}
-            ]},
-            {sem: 27, bloco: "Ciências Humanas", topico: "🧪 SIMULADO CH", cor: "ch", pdf: "Revisão", aula: "", quiz: []},
-            {sem: 28, bloco: "Linguagens", topico: "Português - Interpretação de Textos", cor: "lg", pdf: "Cap. 1-2", aula: "https://www.youtube.com/watch?v=Ze1_PJpgTGs", quiz: [
-                {q: "O que é interpretação de texto?", ops: ["Ler palavras", "Entender significado", "Copiar", "Resumir tudo"], r: "B"},
-                {q: "Qual é o assunto principal de um texto?", ops: ["Primeiro parágrafo", "Ideias principais", "Última frase", "Palavras difíceis"], r: "B"}
-            ]},
-            {sem: 29, bloco: "Linguagens", topico: "Português - Gramática", cor: "lg", pdf: "Cap. 3-4", aula: "https://www.youtube.com/watch?v=_oM0nSaVPfg", quiz: [
-                {q: "Qual é a função do sujeito?", ops: ["Expressar ação", "Sofrer ação", "Realizar ação", "Modificar verbo"], r: "C"},
-                {q: "Qual é a diferença entre verbo transitivo e intransitivo?", ops: ["Cor diferente", "Exigem complemento ou não", "Tamanho", "Som"], r: "B"}
-            ]},
-            {sem: 30, bloco: "Linguagens", topico: "Literatura Brasileira", cor: "lg", pdf: "Capítulos variados", aula: "https://www.youtube.com/watch?v=C_D5sVlmwbA", quiz: [
-                {q: "Quem foi o maior poeta brasileiro?", ops: ["Clarrice", "Castro Alves", "Machado", "Drummond"], r: "D"},
-                {q: "O que é Modernismo?", ops: ["Literatura moderna", "Movimento de inovação", "Apenas poesia", "Literatura clássica"], r: "B"}
-            ]},
-            {sem: 31, bloco: "Linguagens", topico: "Inglês - Vocabulário e Estruturas", cor: "lg", pdf: "Cap. 1-2", aula: "https://www.youtube.com/watch?v=mieMBowQd2U", quiz: [
-                {q: "Como se diz 'gato' em inglês?", ops: ["Dog", "Cat", "Bird", "Fish"], r: "B"},
-                {q: "Qual é o verbo 'to be' no presente?", ops: ["Was/were", "Am/is/are", "Will be", "Has been"], r: "B"}
-            ]},
-            {sem: 32, bloco: "Linguagens", topico: "Inglês - Leitura e Compreensão", cor: "lg", pdf: "Cap. 3-4", aula: "https://www.youtube.com/watch?v=krzhrOVDWco", quiz: [
-                {q: "O que é compreensão de leitura?", ops: ["Ler rápido", "Entender o texto", "Decorar", "Pronunciar bem"], r: "B"},
-                {q: "Como melhorar leitura em inglês?", ops: ["Não ler", "Ler livros", "Falar", "Assistir TV"], r: "B"}
-            ]},
-            {sem: 33, bloco: "Linguagens", topico: "Redação ENCCEJA", cor: "lg", pdf: "Capítulo específico", aula: "https://www.youtube.com/watch?v=wxQo3sY_6Mk", quiz: [
-                {q: "Qual é o formato da redação ENEM?", ops: ["Poema", "Narrativa", "Dissertação argumentativa", "Crônica"], r: "C"},
-                {q: "Quantas linhas mínimo tem a redação?", ops: ["20", "25", "30", "40"], r: "C"}
-            ]},
-            {sem: 34, bloco: "Linguagens", topico: "Revisão Linguagens", cor: "lg", pdf: "Tópicos revisados", aula: "Mix de aulas", quiz: [
-                {q: "Qual é o objetivo da revisão?", ops: ["Perder tempo", "Consolidar aprendizado", "Esquecer tudo", "Aprender novo"], r: "B"},
-                {q: "Como estudar para revisão?", ops: ["Sem plano", "Praticar exercícios", "Dormir", "Ignorar"], r: "B"}
-            ]},
-            {sem: 35, bloco: "Linguagens", topico: "🧪 SIMULADO LINGUAGENS", cor: "lg", pdf: "Revisão", aula: "", quiz: []},
-            {sem: 36, bloco: "Linguagens", topico: "🧪 SIMULADO FINAL", cor: "lg", pdf: "Prova branca", aula: "", quiz: []}
-        ];
-
-        // ===== FUNÇÕES ABAS =====
+        // ===== FUNÇÕES =====
         function abrirAba(aba) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
             document.getElementById(`tab-${aba}`).classList.add('active');
             event.target.classList.add('active');
         }
 
-        // ===== GERADOR DE SEMANAS =====
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            content.classList.toggle('active');
+        }
+
+        function atualizarProgresso() {
+            const checkboxes = document.querySelectorAll('.video-checkbox');
+            videosMarcados = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const percentual = Math.round((videosMarcados / totalVideos) * 100);
+            document.getElementById('progressFill').style.width = percentual + '%';
+            document.getElementById('progressText').textContent = `${videosMarcados}/${totalVideos} vídeos`;
+        }
+
         function gerarSemanas() {
             const container = document.getElementById('semanas-container');
+            totalVideos = plano.reduce((sum, s) => sum + s.videos.length, 0);
             
             plano.forEach((s) => {
                 const contentId = `content-${s.sem}`;
@@ -987,333 +664,51 @@
                                 <h2>Semana ${s.sem} - ${s.topico}</h2>
                                 <p>${s.bloco}</p>
                             </div>
-                            <input type="checkbox" class="checkbox-semana" data-semana="${s.sem}" onchange="atualizarProgresso()" onclick="event.stopPropagation();">
-                            <span class="badge ${s.cor}">${s.bloco.substring(0, 3).toUpperCase()}</span>
+                            <span class="badge ${s.cor}">${s.videos.length} vídeos</span>
                         </div>
 
                         <div class="semana-content" id="${contentId}">
+                            <div class="etapa">
+                                <div class="etapa-titulo">📚 Material Teórico</div>
+                                <a href="#" class="pdf-link" onclick="alert('Apostila: ${s.pdf}');">
+                                    📄 Apostila ${s.pdf}
+                                </a>
+                            </div>
+
+                            <div class="etapa">
+                                <div class="etapa-titulo">🎬 ${s.videos.length} Vídeos Aula</div>
                 `;
 
-                if(s.pdf && s.pdf !== "Revisão" && s.pdf !== "Prova branca") {
+                s.videos.forEach((v, i) => {
                     html += `
-                        <div class="etapa">
-                            <div class="etapa-titulo">📖 1. Material Teórico</div>
-                            <div class="etapa-conteudo">
-                                Leia o material de referência:<br>
-                                <strong>${s.pdf}</strong><br>
-                                <span style="font-size: 12px; color: #999;">Duração estimada: 45 minutos</span>
+                        <div class="video-item">
+                            <input type="checkbox" class="video-checkbox" onchange="atualizarProgresso()">
+                            <div class="video-content">
+                                <div class="video-nome">${v.nome}</div>
+                                <a href="${v.url}" target="_blank" class="video-link">▶️ Assistir</a>
                             </div>
                         </div>
                     `;
-                }
-
-                if(s.aula) {
-                    html += `
-                        <div class="etapa">
-                            <div class="etapa-titulo">🎥 2. Aula</div>
-                            <div class="etapa-conteudo">
-                                Assista a aula complementar:
-                                <br>
-                                <a href="${s.aula}" target="_blank" class="aula-link">▶ Abrir Aula (YouTube)</a>
-                                <br>
-                                <span style="font-size: 12px; color: #999;">Duração estimada: 30 minutos</span>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                if(s.quiz && s.quiz.length > 0) {
-                    html += `
-                        <div class="etapa">
-                            <div class="etapa-titulo">✏️ 3. Exercícios de Fixação</div>
-                            <div class="quiz-container">
-                                <div style="font-weight: 600; margin-bottom: 12px;">Quiz de Verificação (${s.quiz.length} perguntas)</div>
-                    `;
-
-                    s.quiz.forEach((q, qIdx) => {
-                        const qId = `quiz-${s.sem}-${qIdx}`;
-                        html += `
-                            <div class="quiz-pergunta">
-                                <div class="quiz-texto">${qIdx + 1}. ${q.q}</div>
-                                <div class="quiz-opcoes">
-                        `;
-
-                        q.ops.forEach((op, opIdx) => {
-                            const letra = String.fromCharCode(65 + opIdx);
-                            const inputId = `${qId}-${letra}`;
-                            html += `
-                                <label class="quiz-opcao" id="label-${inputId}">
-                                    <input type="radio" name="${qId}" value="${letra}" id="${inputId}" onchange="verificarResposta('${qId}', '${q.r}')">
-                                    <span>${letra}) ${op}</span>
-                                </label>
-                            `;
-                        });
-
-                        html += `
-                                </div>
-                                <div id="resultado-${qId}" style="display: none;"></div>
-                            </div>
-                        `;
-                    });
-
-                    html += `
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
+                });
 
                 html += `
+                            </div>
                         </div>
                     </div>
                 `;
 
                 container.innerHTML += html;
             });
-        }
 
-        function toggleContent(contentId) {
-            const content = document.getElementById(contentId);
-            content.classList.toggle('active');
-        }
-
-        function verificarResposta(qId, gabarito) {
-            const resposta = document.querySelector(`input[name="${qId}"]:checked`)?.value;
-            if(!resposta) return;
-
-            const resultadoDiv = document.getElementById(`resultado-${qId}`);
-            const label = document.getElementById(`label-${qId}-${resposta}`);
-
-            if(resposta === gabarito) {
-                resultadoDiv.innerHTML = '✓ Correto!';
-                resultadoDiv.className = 'quiz-resultado correto';
-                label.classList.add('correta');
-            } else {
-                resultadoDiv.innerHTML = `✗ Incorreto. Resposta: ${gabarito}`;
-                resultadoDiv.className = 'quiz-resultado incorreto';
-                label.classList.add('incorreta');
-            }
-
-            resultadoDiv.style.display = 'block';
-        }
-
-        // ===== GERADOR CARDS SIMULADOS =====
-        function gerarCardsSimulados() {
-            const grid = document.getElementById('simulados-grid');
-            
-            const simulados = [
-                {nome: "Simulado Matemática", icone: "📐", classe: "mt", tipo: "matematica", semana: 9},
-                {nome: "Simulado Ciências Naturais", icone: "🔬", classe: "cn", tipo: "ciencias-naturais", semana: 18},
-                {nome: "Simulado Ciências Humanas", icone: "📜", classe: "ch", tipo: "ciencias-humanas", semana: 27},
-                {nome: "Simulado Linguagens", icone: "📝", classe: "lg", tipo: "linguagens", semana: 35},
-                {nome: "Simulado Final Completo", icone: "⭐", classe: "final", tipo: "final", semana: 36}
-            ];
-
-            simulados.forEach(sim => {
-                let html = `
-                    <button class="simulado-card ${sim.classe}" onclick="iniciarSimulado('${sim.tipo}')">
-                        <div class="simulado-icon">${sim.icone}</div>
-                        <div class="simulado-titulo">${sim.nome}</div>
-                        <div class="simulado-info">Semana ${sim.semana}</div>
-                    </button>
-                `;
-                grid.innerHTML += html;
-            });
-        }
-
-        // ===== SIMULADO =====
-        function iniciarSimulado(tipo) {
-            questaoAtual = 0;
-            respostas = {};
-            totalAcertos = 0;
-            cronometroSegundos = 0;
-            simuladoPausado = false;
-
-            if(tipo === 'matematica') questoesAtuais = questoesMat;
-            else if(tipo === 'ciencias-naturais') questoesAtuais = questoesCN;
-            else if(tipo === 'ciencias-humanas') questoesAtuais = questoesCH;
-            else if(tipo === 'linguagens') questoesAtuais = questoesLG;
-            else if(tipo === 'final') questoesAtuais = [...questoesMat, ...questoesCN, ...questoesCH, ...questoesLG];
-
-            document.getElementById('simulado-modal').classList.add('active');
-            document.getElementById('simulado-titulo').textContent = `${tipo.toUpperCase()}`;
-            document.getElementById('quest-total').textContent = questoesAtuais.length;
-            
-            iniciarCronometro();
-            renderizarQuestao();
-        }
-
-        function iniciarCronometro() {
-            if(cronometroIntervalo) clearInterval(cronometroIntervalo);
-            
-            cronometroIntervalo = setInterval(() => {
-                if(!simuladoPausado) {
-                    cronometroSegundos++;
-                    const min = Math.floor(cronometroSegundos / 60);
-                    const seg = cronometroSegundos % 60;
-                    document.getElementById('cronometro').textContent = 
-                        `${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
-                }
-            }, 1000);
-        }
-
-        function pausarSimulado() {
-            simuladoPausado = !simuladoPausado;
-            const btn = document.getElementById('btn-pausar');
-            btn.textContent = simuladoPausado ? '▶ Retomar' : '⏸ Pausar';
-            btn.style.opacity = simuladoPausado ? '0.7' : '1';
-        }
-
-        function renderizarQuestao() {
-            const q = questoesAtuais[questaoAtual];
-            const respondida = respostas[questaoAtual];
-            
-            const progressoPct = Math.round(((questaoAtual + 1) / questoesAtuais.length) * 100);
-            const progressWidth = (questaoAtual + 1) / questoesAtuais.length * 100;
-            
-            document.getElementById('quest-atual').textContent = questaoAtual + 1;
-            
-            let html = `
-                <div style="margin-bottom: 20px;">
-                    <div class="progress-bar-quest">
-                        <div class="progress-fill-quest" style="width: ${progressWidth}%"></div>
-                    </div>
-                </div>
-
-                <div class="enunciado">${q.enunciado}</div>
-                
-                <div class="alternativas">
-            `;
-            
-            ['A','B','C','D','E'].forEach(letra => {
-                const selecionada = respondida === letra;
-                const correta = q.gabarito === letra;
-                const mostraResultado = respondida !== undefined;
-                
-                let classe = 'alternativa';
-                if(mostraResultado) {
-                    if(selecionada && correta) classe += ' correta';
-                    else if(selecionada && !correta) classe += ' incorreta';
-                    else if(!selecionada && correta) classe += ' correta';
-                    else if(selecionada) classe += ' selecionada';
-                } else if(selecionada) {
-                    classe += ' selecionada';
-                }
-                
-                const onclick = mostraResultado ? '' : `onclick="selecionarResposta('${letra}')"`;
-                
-                html += `<div class="${classe}" ${onclick}><strong>${letra})</strong> ${q.alternativas[letra]} ${mostraResultado && correta ? '✓' : ''} ${mostraResultado && selecionada && !correta ? '✗' : ''}</div>`;
-            });
-            
-            html += `</div>`;
-            
-            html += `
-                <div class="botoes-questao">
-                    <button class="btn-quest" ${questaoAtual === 0 ? 'disabled' : `onclick="questaoAnterior()"`}>← Anterior</button>
-                    ${respondida ? `
-                        <button class="btn-quest btn-proxima" onclick="proximaQuestao()">
-                            ${questaoAtual === questoesAtuais.length - 1 ? 'Ver Resultado' : 'Próxima →'}
-                        </button>
-                    ` : `<button class="btn-quest btn-proxima" disabled>Responda para continuar</button>`}
-                </div>
-            `;
-            
-            document.getElementById('conteudo-quest').innerHTML = html;
-        }
-
-        function selecionarResposta(letra) {
-            respostas[questaoAtual] = letra;
-            if(letra === questoesAtuais[questaoAtual].gabarito) {
-                totalAcertos++;
-            }
-            renderizarQuestao();
-        }
-
-        function proximaQuestao() {
-            if (questaoAtual < questoesAtuais.length - 1) {
-                questaoAtual++;
-                renderizarQuestao();
-            } else {
-                mostrarResultado();
-            }
-        }
-
-        function questaoAnterior() {
-            if (questaoAtual > 0) {
-                questaoAtual--;
-                renderizarQuestao();
-            }
-        }
-
-        function mostrarResultado() {
-            const pct = Math.round((totalAcertos / questoesAtuais.length) * 100);
-            const min = Math.floor(cronometroSegundos / 60);
-            const seg = cronometroSegundos % 60;
-            
-            let html = `
-                <div class="resultado-final">
-                    <h2>🎉 Simulado Finalizado!</h2>
-                    <div class="score">${totalAcertos}/${questoesAtuais.length}</div>
-                    <div class="mensagem-resultado">Você acertou <strong>${pct}%</strong></div>
-                    <div style="font-size: 14px; color: #999; margin-bottom: 20px;">Tempo: ${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}</div>
-                    <p style="font-size: 16px; color: #666; margin-bottom: 30px;">
-                        ${pct >= 70 ? '👏 Excelente!' : pct >= 50 ? '👍 Bom!' : '💪 Continue estudando!'}
-                    </p>
-                    <button class="btn-reiniciar" onclick="reiniciarSimulado()">Refazer</button>
-                    <button class="btn-voltar-simulados" onclick="fecharSimulado()">Voltar</button>
-                </div>
-            `;
-            
-            document.getElementById('conteudo-quest').innerHTML = html;
-        }
-
-        function reiniciarSimulado() {
-            questaoAtual = 0;
-            respostas = {};
-            totalAcertos = 0;
-            cronometroSegundos = 0;
-            renderizarQuestao();
-        }
-
-        function finalizarSimulado() {
-            mostrarResultado();
-            clearInterval(cronometroIntervalo);
-        }
-
-        function fecharSimulado() {
-            document.getElementById('simulado-modal').classList.remove('active');
-            clearInterval(cronometroIntervalo);
-            abrirAba('simulados');
-        }
-
-        // ===== PROGRESSO =====
-        function atualizarProgresso() {
-            const checkboxes = document.querySelectorAll('.checkbox-semana:checked');
-            const total = document.querySelectorAll('.checkbox-semana').length;
-            const percent = Math.round((checkboxes.length / total) * 100);
-
-            document.getElementById('progressFill').style.width = percent + '%';
-            document.getElementById('progresso-percent').textContent = percent + '%';
-
-            localStorage.setItem('progresso-encceja', JSON.stringify(Array.from(checkboxes).map(cb => cb.dataset.semana)));
-        }
-
-        // ===== INICIALIZAÇÃO =====
-        window.addEventListener('load', function() {
-            gerarSemanas();
-            gerarCardsSimulados();
             atualizarProgresso();
+        }
 
-            const progresso = localStorage.getItem('progresso-encceja');
-            if(progresso) {
-                const semanas = JSON.parse(progresso);
-                semanas.forEach(s => {
-                    const checkbox = document.querySelector(`[data-semana="${s}"]`);
-                    if(checkbox) checkbox.checked = true;
-                });
-                atualizarProgresso();
-            }
-        });
+        function abrirSimulado(tipo) {
+            alert(`Simulado ${tipo} - Em breve a integração com questões!`);
+        }
+
+        // ===== INICIALIZAR =====
+        gerarSemanas();
     </script>
 </body>
 </html>
