@@ -361,6 +361,188 @@
                 font-size: 14px;
             }
         }
+
+        /* ===== MODAL SIMULADO ===== */
+        .modal-simulado {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-simulado.ativo {
+            display: flex;
+        }
+        
+        .modal-conteudo {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header-controle {
+            background: #f8f9fa;
+            border-bottom: 2px solid #ddd;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .cronometro {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2563eb;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .botoes-controle {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-controle {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-pausar {
+            background: #fbbf24;
+            color: #78350f;
+            border-color: #fbbf24;
+        }
+        
+        .btn-finalizar {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+        
+        .btn-fechar {
+            background: #6b7280;
+            color: white;
+            border-color: #6b7280;
+        }
+        
+        .conteudo-simulado {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        
+        .questao-box {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .alternativas {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .alternativa {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .alternativa.selecionada {
+            background: #dbeafe;
+            border-color: #2563eb;
+            font-weight: 500;
+            color: #1e40af;
+        }
+        
+        .alternativa.correta {
+            background: #dcfce7;
+            border-color: #22c55e;
+            color: #166534;
+        }
+        
+        .alternativa.incorreta {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+        
+        .gabarito-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 13px;
+            margin-top: 1rem;
+            color: #0369a1;
+        }
+        
+        .botoes-navegacao {
+            display: flex;
+            gap: 8px;
+            margin-top: 1.5rem;
+        }
+        
+        .btn-sim {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .btn-sim:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-proximo-sim {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+            flex: 1;
+        }
+        
+        .resultado-final {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2563eb;
+            margin: 1rem 0;
+        }
     </style>
 </head>
 <body>
@@ -772,6 +954,168 @@
 
         // ===== INICIALIZAR =====
         gerarSemanas();
+
+        // ===== SIMULADO INTEGRADO =====
+        let questoesSim = [];
+        let gabarito = {"1":"B","2":"D","3":"D","4":"C","5":"E","6":"C","7":"A","8":"C","9":"C","10":"C","11":"A","12":"B","13":"B","14":"E","15":"D","16":"E","17":"B","18":"A","19":"D","20":"D","21":"A","22":"D","23":"B","24":"E","25":"E"};
+        let questaoAtualSim = 0;
+        let respostasSim = {};
+        let totalAcertosSim = 0;
+        let tempoDecorridoSim = 0;
+        let cronometroAtivoSim = true;
+        let intervaloCronometroSim = null;
+        
+        // Questões de exemplo (90 total)
+        const QUESTOES_EXEMPLO_SIM = [
+            {numero: 1, enunciado: "Syphilis rates are rising relentlessly in Britain. No one wants syphilis. Its symptoms include ulcers and insanity. The 'French disease' as the English long called it, is an infamously 'othered' illness. Com base na leitura, o termo 'othering' remete ao(à)", alternativas: {A: "disseminação de uma doença transmissível", B: "crescimento do número de casos de DSTs", C: "origem histórica de uma antiga enfermidade", D: "dificuldade de identificar as origens da sífilis", E: "tendência de culpar os outros por um problema"}},
+            {numero: 2, enunciado: "What is aquamation? The green alternative to cremation. Aquamation is a water-based process whose scientific name is 'alkaline hydrolysis'. O corpo do arcebispo anglicano Desmond Tutu passou por uma aquamação. Com base no texto, o processo em questão", alternativas: {A: "produz muito mais poluentes do que a cremação", B: "não emite os gases que provocam o efeito estufa", C: "é conhecido popularmente como hidrólise alcalina", D: "foi determinado pelos familiares de Desmond Tutu", E: "requer mais energia do que a cremação tradicional"}},
+        ];
+        
+        function abrirSimulado(tipo) {
+            // Preencher com questões até 90
+            questoesSim = [...QUESTOES_EXEMPLO_SIM];
+            while(questoesSim.length < 90) {
+                const num = questoesSim.length + 1;
+                questoesSim.push({
+                    numero: num,
+                    enunciado: `[Questão ${num}] - Leia o enunciado e escolha a melhor alternativa.`,
+                    alternativas: {A: "Opção A", B: "Opção B", C: "Opção C", D: "Opção D", E: "Opção E"}
+                });
+            }
+            
+            document.getElementById('modalSimulado').classList.add('ativo');
+            document.getElementById('totalQuestoesSim').textContent = questoesSim.length;
+            questaoAtualSim = 0;
+            respostasSim = {};
+            totalAcertosSim = 0;
+            tempoDecorridoSim = 0;
+            cronometroAtivoSim = true;
+            
+            renderizarQuestaoSim();
+            iniciarCronometroSim();
+        }
+        
+        function renderizarQuestaoSim() {
+            const q = questoesSim[questaoAtualSim];
+            const respondida = respostasSim[questaoAtualSim];
+            const gabaritoQ = gabarito[questaoAtualSim + 1] || 'A';
+            
+            const progressoPct = Math.round(((questaoAtualSim + 1) / questoesSim.length) * 100);
+            document.getElementById('progressSim').style.width = progressoPct + '%';
+            document.getElementById('questaoNumeroSim').textContent = questaoAtualSim + 1;
+            document.getElementById('percentualSim').textContent = progressoPct + '%';
+            
+            let html = '<div class="questao-box"><div class="questao-numero"><strong>QUESTÃO ' + q.numero + '</strong></div><div class="enunciado">' + q.enunciado + '</div><div class="alternativas">';
+            
+            ['A','B','C','D','E'].forEach(letra => {
+                const selecionada = respondida === letra;
+                const correta = gabaritoQ === letra;
+                const mostraResultado = respondida !== undefined;
+                
+                let classe = 'alternativa';
+                if(mostraResultado) {
+                    if(selecionada && correta) classe += ' correta';
+                    else if(selecionada && !correta) classe += ' incorreta';
+                    else if(!selecionada && correta) classe += ' correta';
+                } else if(selecionada) {
+                    classe += ' selecionada';
+                }
+                
+                const onclick = mostraResultado ? '' : 'onclick="selecionarRespostaSim('' + letra + '')"';
+                html += '<div class="' + classe + '" ' + onclick + '><strong>' + letra + ')</strong> ' + q.alternativas[letra] + (mostraResultado && correta ? ' ✓' : '') + (mostraResultado && selecionada && !correta ? ' ✗' : '') + '</div>';
+            });
+            
+            html += '</div>';
+            
+            if(respondida) {
+                html += '<div class="gabarito-info"><strong>Gabarito:</strong> ' + gabaritoQ + '</div>';
+            }
+            
+            html += '<div class="botoes-navegacao"><button class="btn-sim" ' + (questaoAtualSim === 0 ? 'disabled' : 'onclick="questaoAnteriorSim()"') + '>← Anterior</button>' + (respondida ? '<button class="btn-sim btn-proximo-sim" onclick="proximaQuestaoSim()">' + (questaoAtualSim === questoesSim.length - 1 ? 'Ver resultado →' : 'Próxima →') + '</button>' : '<button class="btn-sim btn-proximo-sim" disabled>Responda para continuar</button>') + '</div>';
+            
+            document.getElementById('conteudoSimulado').innerHTML = html;
+        }
+        
+        function selecionarRespostaSim(letra) {
+            respostasSim[questaoAtualSim] = letra;
+            const gabaritoQ = gabarito[questaoAtualSim + 1] || 'A';
+            if(letra === gabaritoQ) totalAcertosSim++;
+            renderizarQuestaoSim();
+        }
+        
+        function proximaQuestaoSim() {
+            if(questaoAtualSim < questoesSim.length - 1) {
+                questaoAtualSim++;
+                renderizarQuestaoSim();
+            } else {
+                mostrarResultadoSim();
+            }
+        }
+        
+        function questaoAnteriorSim() {
+            if(questaoAtualSim > 0) {
+                questaoAtualSim--;
+                renderizarQuestaoSim();
+            }
+        }
+        
+        function mostrarResultadoSim() {
+            const pct = Math.round((totalAcertosSim / questoesSim.length) * 100);
+            const mensagem = pct >= 70 ? '🎉 Excelente desempenho!' : pct >= 50 ? '👍 Bom começo! Continue estudando.' : '💪 Continue praticando, você consegue!';
+            
+            let html = '<div class="resultado-final"><h2 style="font-size: 24px; margin-bottom: 1rem;">Simulado Finalizado!</h2><div class="score">' + totalAcertosSim + '/' + questoesSim.length + '</div><div style="font-size: 16px; color: #666; margin-bottom: 2rem;">Você acertou <strong>' + pct + '%</strong> das questões</div><p style="font-size: 14px; color: #999; margin-bottom: 2rem;">' + mensagem + '</p><button class="reiniciar-btn" onclick="reiniciarSimulado()">Refazer Simulado</button></div>';
+            
+            document.getElementById('conteudoSimulado').innerHTML = html;
+        }
+        
+        function reiniciarSimulado() {
+            questaoAtualSim = 0;
+            respostasSim = {};
+            totalAcertosSim = 0;
+            renderizarQuestaoSim();
+        }
+        
+        function iniciarCronometroSim() {
+            intervaloCronometroSim = setInterval(() => {
+                if(cronometroAtivoSim) {
+                    tempoDecorridoSim++;
+                    atualizarCronometroSim();
+                }
+            }, 1000);
+        }
+        
+        function atualizarCronometroSim() {
+            const minutos = Math.floor(tempoDecorridoSim / 60);
+            const segundos = tempoDecorridoSim % 60;
+            const minStr = String(minutos).padStart(2, '0');
+            const segStr = String(segundos).padStart(2, '0');
+            document.getElementById('cronometro').textContent = minStr + ':' + segStr;
+        }
+        
+        function togglePausar() {
+            cronometroAtivoSim = !cronometroAtivoSim;
+            const btnPausar = document.getElementById('btnPausar');
+            
+            if(cronometroAtivoSim) {
+                btnPausar.textContent = '⏸️ Pausar';
+            } else {
+                btnPausar.textContent = '▶️ Retomar';
+            }
+        }
+        
+        function finalizarAgora() {
+            if(confirm('Deseja finalizar o simulado agora?')) {
+                clearInterval(intervaloCronometroSim);
+                mostrarResultadoSim();
+            }
+        }
+        
+        function fecharSimulado() {
+            if(confirm('Deseja fechar o simulado? Seu progresso será perdido.')) {
+                document.getElementById('modalSimulado').classList.remove('ativo');
+                clearInterval(intervaloCronometroSim);
+            }
+        }
     </script>
 </body>
 </html>
