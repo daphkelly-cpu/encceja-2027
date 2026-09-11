@@ -476,6 +476,7 @@
 
             <div class="botoes-acao">
                 <button class="btn btn-primary" onclick="iniciarSimulado()">Iniciar Simulado</button>
+                <button class="btn btn-secondary" onclick="voltarPlano()" id="btnVoltar">← Voltar ao Plano</button>
             </div>
         </div>
 
@@ -12215,6 +12216,13 @@
 
         function voltarControles() {
             reiniciarSimulado();
+        }
+
+        function voltarPlano() {
+            window.location.href = 'https://daphkelly-cpu.github.io/encceja-2027/?v=1';
+        } else {
+                window.history.back();
+            }
         }
     </script>
 </body>
